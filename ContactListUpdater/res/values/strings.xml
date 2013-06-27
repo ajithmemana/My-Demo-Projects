@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ContactListUpdater</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_click_from_camera">ClickFromCamera</string>
+    <string name="title_activity_face_detection">FaceDetection</string>
+    <string name="title_activity_detect_face">DetectFace</string>
+    <string name="title_activity_touch_crop">TouchCrop</string>
+    <string name="title_activity_pic_grid_display">PicGridDisplay</string>
+    <string name="title_activity_contacts_list_display">ContactsListDisplay</string>
+    <string name="title_activity_process_grid_pic">ProcessGridPic</string>
+    <string name="title_activity_camera_face_test">CameraFaceTest</string>
+
+</resources>

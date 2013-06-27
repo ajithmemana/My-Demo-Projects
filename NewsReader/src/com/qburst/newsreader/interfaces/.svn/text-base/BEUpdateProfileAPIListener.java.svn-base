@@ -1,0 +1,12 @@
+package com.qburst.billexpress.interfaces;
+
+
+/**
+ * @author user Designed BEUpdateProfileAPI interface methods
+ *         profileUpdated and errorInUpdating.
+ */
+public interface BEUpdateProfileAPIListener extends BEBaseAPIListener{
+
+	public void profileUpdated();
+	public void errorInUpdating();
+}

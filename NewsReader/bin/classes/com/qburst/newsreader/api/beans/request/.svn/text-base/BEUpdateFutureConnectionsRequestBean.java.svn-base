@@ -1,0 +1,17 @@
+package com.qburst.billexpress.api.beans.request;
+
+import com.qburst.billexpress.models.BEConnectionList;
+
+public class BEUpdateFutureConnectionsRequestBean extends BESessionRequestBean{
+ 
+	private BEConnectionList connectionList;
+
+	public BEConnectionList getConnectionList() {
+		return connectionList;
+	}
+
+	public void setConnectionList(BEConnectionList connectionList) {
+		this.connectionList = connectionList;
+	}
+
+}

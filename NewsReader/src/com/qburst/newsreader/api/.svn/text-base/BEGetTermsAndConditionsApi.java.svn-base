@@ -1,0 +1,82 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BETermsAndConditionsRequestBean;
+import com.qburst.billexpress.api.beans.response.BETermsAndConditionsResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BETermsAndConditionsApiListener;
+
+public class BEGetTermsAndConditionsApi extends BEBaseApi implements BEApiListener{
+
+	
+	private BETermsAndConditionsApiListener _listener;
+	
+	public BEGetTermsAndConditionsApi(BETermsAndConditionsApiListener listener, BEExceptionApiListener exceptionListener){
+		this._listener = listener;
+		this._excptnListener = exceptionListener;
+	}
+	
+	public void getTandC(String type) {
+		BETermsAndConditionsRequestBean reqestBean = new BETermsAndConditionsRequestBean();
+		reqestBean.setType(type);
+		
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, reqestBean.toJsonString(), BETermsAndConditionsResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}	
+	
+	
+	@Override
+	public String baseUrl() {
+		// TODO Auto-generated method stub
+		return super.baseUrl()+BEApiConstants.getTerms;
+	 	
+	}
+		
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE for BEStatement", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BETermsAndConditionsResponseBean respBean = (BETermsAndConditionsResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {				
+				
+				String tAndC = respBean.getTandC();
+				Log.i("STATEMENT API", tAndC);
+				if(_listener!=null){
+					_listener.receivedTandC(tAndC);
+				}
+				
+			}
+		}else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}	
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		_listener.errorInReceivingtAndC();
+		detectErrorMessage(errorResponse);
+	}
+
+}

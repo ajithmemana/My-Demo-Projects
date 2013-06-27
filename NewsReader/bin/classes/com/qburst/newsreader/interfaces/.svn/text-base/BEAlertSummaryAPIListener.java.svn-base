@@ -1,0 +1,14 @@
+package com.qburst.billexpress.interfaces;
+
+import com.qburst.billexpress.models.BEAlertListDTO;
+
+/**
+ * @author user Designs BEAlertSummaryAPI interface methods receivedAlertSummary
+ *         and failedToFetchAlertSummary.
+ */
+public interface BEAlertSummaryAPIListener extends BEBaseAPIListener {
+
+	public void receivedAlertSummary(BEAlertListDTO summary);
+
+	public void failedToFetchAlertSummary();
+}

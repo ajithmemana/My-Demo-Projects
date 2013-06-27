@@ -1,0 +1,803 @@
+package com.qburst.billexpress.cache;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import org.apache.http.impl.client.BasicCookieStore;
+
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.qburst.billexpress.models.BEAlertListDTO;
+import com.qburst.billexpress.models.BEAlerts;
+import com.qburst.billexpress.models.BEBillers;
+import com.qburst.billexpress.models.BEComparisonModel;
+import com.qburst.billexpress.models.BEConnection;
+import com.qburst.billexpress.models.BEConnectionDTOs;
+import com.qburst.billexpress.models.BEConnectionList;
+import com.qburst.billexpress.models.BEFolder;
+import com.qburst.billexpress.models.BEGetRuleConnections;
+import com.qburst.billexpress.models.BEGetRules;
+import com.qburst.billexpress.models.BEMenuNavigation;
+import com.qburst.billexpress.models.BEMyProfile;
+import com.qburst.billexpress.models.BENotification;
+import com.qburst.billexpress.models.BERulesBillers;
+import com.qburst.billexpress.models.BERulesConnections;
+import com.qburst.billexpress.models.BESenderconnections;
+import com.qburst.billexpress.models.BEStatement;
+
+/**
+ * Cache manager class to handle data cache mechanism. Shared cache mechanism is
+ * provided through static access for caching objects.
+ */
+public class BEDataCache {
+
+	private static BEDataCache _cache;
+	private ArrayList<BEFolder> _folders;
+	private ArrayList<BEConnection> _connections;
+	private ArrayList<BEStatement> _statements;
+	private BEAlertListDTO _alertListDTO;
+	public int getSelectedDate() {
+		return selectedDate;
+	}
+
+
+	public void setSelectedDate(int selectedDate) {
+		this.selectedDate = selectedDate;
+	}
+
+
+	public String get_fromDate() {
+		return _fromDate;
+	}
+
+
+	public void set_fromDate(String _fromDate) {
+		this._fromDate = _fromDate;
+	}
+
+
+	public String get_toDate() {
+		return _toDate;
+	}
+
+
+	public void set_toDate(String _toDate) {
+		this._toDate = _toDate;
+	}
+
+	private int selectedDate = -1;
+	private String _fromDate;
+	private String _toDate;
+	private int statementType;
+	private String _selectedDate;
+	private ArrayList<BEGetRules> _rulesDTOs;
+	private HashMap<Long, BEGetRuleConnections> _ruleMap;
+	private BEGetRuleConnections _updateRule;
+	private HashMap<Long, BEGetRuleConnections> _ruleMapCopy;
+	private BEAlertListDTO copyAlertDTO;
+	private BEGetRuleConnections _ruleConnections;
+	private BEAlertListDTO updatedCopyOfAlertDTO;
+	private boolean _allBillEnableStatus;
+	private BEConnectionList _connectionList;
+	private BEConnectionList _copyConnectionList;
+	private BEConnectionList _updateConnectionList;
+	private BEMenuNavigation _navigations;
+	private String _statementTitle;
+	private ArrayList<BENotification> _notification;
+	private BEMyProfile copyProfileInfo;
+	private String statementListHeading;
+	private BasicCookieStore cookieStore;
+
+	/**
+	 * Access global cache object to retrieve and store object caches.
+	 * 
+	 * @return Shared Cache Manager Object
+	 */
+	public static BEDataCache getSharedCache() {
+
+		if (_cache == null) {
+			_cache = new BEDataCache();
+
+		}
+		return _cache;
+	}
+
+
+	public BEDataCache() {
+
+		_ruleMap = new HashMap<Long, BEGetRuleConnections>();
+		_ruleMapCopy = new HashMap<Long, BEGetRuleConnections>();
+	}
+
+	public BEGetRuleConnections getRuleConnection(Long ruleid) {
+		if (ruleid == null) {
+			ruleid = new Long(0);
+		}
+		BEGetRuleConnections ruleConnection = (BEGetRuleConnections) _ruleMap
+				.get(ruleid);
+
+		return ruleConnection;
+
+	}
+
+	public void setRuleConnection(Long ruleId,
+			BEGetRuleConnections ruleConnections) {
+		if (ruleId == null) {
+			ruleId = new Long(0);
+		}
+		_ruleMap.put(ruleId, ruleConnections);
+	}
+
+	public void setRuleConnectionCopy(Long ruleId,
+			BEGetRuleConnections ruleConnections) {
+		if (ruleId == null) {
+			ruleId = new Long(0);
+		}
+		_ruleMapCopy.put(ruleId, ruleConnections);
+	}
+
+	public BEGetRuleConnections getRuleConnectionCopy(Long ruleId) {
+		if (ruleId == null) {
+			ruleId = new Long(0);
+		}
+		return _ruleMapCopy.get(ruleId);
+	}
+
+	/**
+	 * @param billerCode
+	 * @param ruleId
+	 * @return object of BERulesBillerDetails model based on given biller code
+	 *         and rule id. if cache is empty, returns null.
+	 */
+	public BERulesBillers getRulesBillerDetails(String billerCode, Long ruleId) {
+		if (ruleId == null) {
+			ruleId = new Long(0);
+		}
+		BEGetRuleConnections ruleMap = getRuleConnection(ruleId);
+		BERulesBillers billers = new BERulesBillers();
+		if (ruleMap != null) {
+			int count = ruleMap.getBillers().size();
+
+			for (int i = 0; i < count; i++) {
+
+				billers = ruleMap.getBillers().get(i);
+				if (billers.getBillerCode().equalsIgnoreCase(billerCode)) {
+					return billers;
+				}
+			}
+		}
+		return null;
+
+	}
+
+	/**
+	 * to clear rule hash map.
+	 */
+	public void clearHashMap() {
+		this._ruleMap.clear();
+	}
+
+	/**
+	 * to clear rulesDTOs.
+	 */
+	public void clearRulesDTOs() {
+		this._rulesDTOs.clear();
+	}
+
+	/**
+	 * to clear bill list.
+	 */
+	public void clearStatements() {
+		this._statements = null;
+	}
+
+	/**
+	 * to clear connection list objects.
+	 */
+	public void clearConnectionList() {
+
+		this._connectionList = null;
+
+	}
+
+	public void removeRulesFromRulesDTO(Long ruleId) {
+		if (ruleId == null) {
+			ruleId = new Long(0);
+		}
+
+		for (Iterator<BEGetRules> itr = this._rulesDTOs.iterator(); itr
+				.hasNext();) {
+			BEGetRules rule = itr.next();
+			if (ruleId.equals(rule.getRuleId())) {
+				itr.remove();
+			}
+		}
+
+		/*
+		 * for(Iterator<String> itr = aList.iterator();itr.hasNext();) { String
+		 * element = itr.next(); if("2".equals(element)) { itr.remove(); } }
+		 */
+	}
+
+	public boolean checkRuleEnableStatus(Long ruleId) {
+		if (ruleId == null) {
+			ruleId = new Long(0);
+		}
+		ArrayList<BERulesBillers> billers = getRuleConnection(ruleId)
+				.getBillers();
+
+		int count = billers != null ? billers.size() : 0;
+
+		for (int i = 0; i < count; i++) {
+
+			if (checkRuleEnableStatus(ruleId, billers.get(i)) == false) {
+				return false;
+			}
+
+		}
+
+		return true;
+
+	}
+
+	public boolean checkRuleEnableStatus(Long ruleId, String billerCode) {
+		if (ruleId == null) {
+			ruleId = new Long(0);
+		}
+		ArrayList<BERulesBillers> billers = getRuleConnection(ruleId)
+				.getBillers();
+
+		int count = billers != null ? billers.size() : 0;
+
+		for (int i = 0; i < count; i++) {
+
+			if (billerCode != null && billerCode.length() > 0) {
+
+				if (billerCode.equalsIgnoreCase(billers.get(i).getBillerCode())) {
+					if (checkRuleEnableStatus(ruleId, billers.get(i)) == false) {
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	public boolean checkRuleEnableStatus(Long ruleId, BERulesBillers billers) {
+		if (ruleId == null) {
+			ruleId = new Long(0);
+		}
+		ArrayList<BERulesConnections> connections = billers.getConnections();
+
+		int count = billers.getConnections() != null ? billers.getConnections()
+				.size() : 0;
+
+		for (int i = 0; i < count; i++) {
+
+			BERulesConnections conection = connections.get(i);
+			if (conection.getRuleId() != null
+					&& conection.getRuleId().compareTo(ruleId) != 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Access cached folders.
+	 * 
+	 * @return the folders
+	 */
+	public ArrayList<BEFolder> getFolders() {
+		return _folders;
+	}
+
+	/**
+	 * Given folder object replace existing folder cache.
+	 * 
+	 * @param folders
+	 *            the folders to set
+	 */
+	public void setfolders(ArrayList<BEFolder> folders) {
+		this._folders = folders;
+	}
+
+	/**
+	 * Returns all sub folders within the parent folder addressed with given
+	 * parent id. Returns null if no folder cache is available
+	 * 
+	 * @param _parentFolderId
+	 * @param includeSysFolders
+	 *            - Set to true if you want to access system folders
+	 * @return
+	 */
+
+	public ArrayList<BEFolder> getSubFolders(String _parentFolderId,
+			boolean includeSysFolders) {
+
+		ArrayList<BEFolder> folders = getFolders();
+
+		if (folders != null && folders.size() != 0) {
+
+			if (_parentFolderId.equals("0")) {
+				return folders;
+			}
+
+			ArrayList<BEFolder> subFolders = new ArrayList<BEFolder>();
+
+			for (BEFolder folder : folders) {
+				if(folder.getFolderId().equals(_parentFolderId)){
+					if(null!=folder.getSubfolders()){
+					subFolders = folder.getSubfolders();
+					}
+					break;
+				}
+				
+			}
+
+			return subFolders;
+		}
+
+		return new ArrayList<BEFolder>();
+	}
+
+	/**
+	 * Access cached connection objects.
+	 * 
+	 * @return cached connections
+	 */
+	public ArrayList<BEConnection> getConnections() {
+		return _connections;
+	}
+
+	/**
+	 * Given connection objects are cached and it over writes previous
+	 * connection cache
+	 * 
+	 * @param connections
+	 */
+	public void setConnections(ArrayList<BEConnection> connections) {
+		this._connections = connections;
+	}
+
+	/**
+	 * Clear all object caches, which were cached from server. Clears
+	 * folder,connection etc caches.
+	 */
+	public void clearCache() {
+		setfolders(null);
+		setConnections(null);
+	}
+
+	public static void clearWholeCache() {
+
+		_cache = null;
+	}
+
+	public boolean isAllBillEnableStatus() {
+		return _allBillEnableStatus;
+	}
+
+	public void setAllBillEnableStatus(boolean allBillEnableStatus) {
+		this._allBillEnableStatus = allBillEnableStatus;
+	}
+
+	public ArrayList<BEStatement> get_statements() {
+		return _statements;
+	}
+
+	public void set_statements(ArrayList<BEStatement> _statements) {
+		this._statements = _statements;
+	}
+
+	public BEConnectionList get_connectionList() {
+		return _connectionList;
+	}
+
+	public void set_connectionList(BEConnectionList _connectionList) {
+		this._connectionList = _connectionList;
+	}
+
+	public BEAlertListDTO get_alertListDTO() {
+		return _alertListDTO;
+	}
+
+	public void set_alertListDTO(BEAlertListDTO _alertListDTO) {
+		this._alertListDTO = _alertListDTO;
+	}
+
+	public ArrayList<BEAlerts> getAlertList() {
+		ArrayList<BEAlerts> alerts = get_alertListDTO().getAlerts();
+
+		return alerts;
+	}
+
+	public ArrayList<BEBillers> getBillersList(String alertType) {
+		ArrayList<BEAlerts> alerts = getAlertList();
+		ArrayList<BEBillers> biller = null;
+		for (BEAlerts aler : alerts) {
+			if (aler.getAlertType().equals(alertType)) {
+				biller = aler.getBillers();
+			}
+		}
+		return biller;
+	}
+
+	/**
+	 * @param billerCode
+	 * @return object of BEBillers corresponding to given biller code. if cache
+	 *         is empty, returns null.
+	 */
+	public BEBillers getBillerDetail(String billerCode) {
+
+		ArrayList<BEAlerts> alerts = getAlertList();
+		BEBillers biller = new BEBillers();
+		for (BEAlerts aler : alerts) {
+			ArrayList<BEBillers> billers = aler.getBillers();
+
+			for (BEBillers bill : billers) {
+				if (bill.getBillerCode().equals(billerCode)) {
+
+					biller = bill;
+					return biller;
+				}
+			}
+		}
+
+		return biller;
+	}
+
+	/**
+	 * @param billerCode
+	 * @return boolean value corresponding to the status of biller level flag
+	 *         based on given biller code.
+	 */
+	public boolean getForBillLevelStatus(String billerCode) {
+		boolean flag = false;
+		ArrayList<BEAlerts> alerts = getAlertList();
+		for (BEAlerts aler : alerts) {
+			ArrayList<BEBillers> billers = aler.getBillers();
+
+			for (BEBillers bill : billers) {
+				if (bill.getBillerCode().equals(billerCode)) {
+					flag = bill.isForbillerLevel();
+					Log.i("Return from", bill.getBillerName());
+					return flag;
+				}
+			}
+		}
+
+		return flag;
+	}
+
+	/**
+	 * @param billerCode
+	 * @return connectionDTOs with given billerCode. if cache is empty, returns
+	 *         null.
+	 */
+	public ArrayList<BEConnectionDTOs> getConnectionDTO(String billerCode) {
+		ArrayList<BEAlerts> alerts = getAlertList();
+		ArrayList<BEConnectionDTOs> connectionDTO = null;
+		for (BEAlerts aler : alerts) {
+			ArrayList<BEBillers> billers = aler.getBillers();
+
+			for (BEBillers bill : billers) {
+				if (bill.getBillerCode().equals(billerCode)) {
+					connectionDTO = bill.getConnectionDTOs();
+					return connectionDTO;
+				}
+			}
+		}
+		return connectionDTO;
+	}
+
+	public ArrayList<String> getAlertTypesList() {
+		ArrayList<String> alertTypeList = new ArrayList<String>();
+		ArrayList<BEAlerts> alerts = getAlertList();
+		for (BEAlerts alert : alerts) {
+			alertTypeList.add(alert.getAlertType());
+		}
+		return alertTypeList;
+	}
+
+	public boolean getAlertStatus(String alertType) {
+		ArrayList<String> alertTypeList = getAlertTypesList();
+		if (alertType.equals(alertTypeList.get(0))) {
+			return get_alertListDTO().isAllIncomingEnabled();
+		} else if (alertType.equals(alertTypeList.get(1))) {
+			return get_alertListDTO().isAllUnreadEnabled();
+		} else if (alertType.equals(alertTypeList.get(2))) {
+			return get_alertListDTO().isAllAutoFwdEnabled();
+		}
+		return true;
+	}
+
+	/**
+	 * @param senderCode
+	 * @return senderConnection object with given sender code. if cache is
+	 *         empty, returns null.
+	 */
+	public BESenderconnections getSenderDetails(String senderCode) {
+
+		BEConnectionList connectionList = get_connectionList();
+		BESenderconnections senderConnections = new BESenderconnections();
+		if (connectionList != null) {
+			int count = connectionList.getSenderConnections().size();
+
+			for (int i = 0; i < count; i++) {
+
+				senderConnections = connectionList.getSenderConnections()
+						.get(i);
+				if (senderConnections.getSenderCode().equalsIgnoreCase(
+						senderCode)) {
+					break;
+				}
+
+			}
+
+		}
+
+		return senderConnections;
+
+	}
+
+	/**
+	 * returns folders with given folderId.
+	 * 
+	 * @param folderid
+	 * @return folders from BEFolders arrayList
+	 */
+	public String getFolderName(String folderid) {
+		if (folderid == null) {
+			return "";
+		}
+		ArrayList<BEFolder> folders = getFolders();
+		String foldername = null;
+		if (folders != null) {
+			int count = folders.size();
+			for (int i = 0; i < count; i++) {
+
+				if (folders.get(i).getFolderId().equals(folderid)) {
+					foldername = folders.get(i).getFolderName();
+					return foldername;
+				}
+			}
+		}
+
+		return "";
+	}
+
+	public void setMenuNavigations(BEMenuNavigation navigations) {
+		this._navigations = navigations;
+	}
+
+	public BEMenuNavigation getMenuNavigations() {
+		return this._navigations;
+	}
+
+	public BEAlertListDTO getCopyAlertDTO() {
+		return copyAlertDTO;
+	}
+
+	public void setCopyAlertDTO(BEAlertListDTO copyAlertDTO) {
+		this.copyAlertDTO = copyAlertDTO;
+	}
+
+	/**
+	 * compares working copy with modified copy.
+	 * 
+	 * @param workingProfile
+	 * @return boolean based on comparison.
+	 */
+	public boolean compareProfile(BEMyProfile workingProfile) {
+		BEMyProfile copyProfile = getCopyProfileInfo();
+		BEComparisonModel compareModel = workingProfile.compare(copyProfile);
+
+		return compareModel.isFlag();
+
+	}
+
+	/**
+	 * Compares working copy with cached copy to see if there are changes made.
+	 * 
+	 * @return boolean value if there is any change to update.
+	 */
+	public boolean compareAlertListDTO() {
+		BEAlertListDTO workingAlertList = BEDataCache.getSharedCache()
+				.get_alertListDTO();
+		BEAlertListDTO copyAlertList = BEDataCache.getSharedCache()
+				.getCopyAlertDTO();
+
+		BEComparisonModel compareModel = workingAlertList
+				.compare(copyAlertList);
+		if (!compareModel.isFlag()) {
+			Gson gson = new GsonBuilder().create();
+
+			Log.i("Working", gson.toJson(workingAlertList));
+			Log.i("Copy", gson.toJson(copyAlertList));
+			Log.i("Diff", gson.toJson(compareModel.getObject()));
+			setUpdatedCopyOfAlertDTO((BEAlertListDTO) compareModel.getObject());
+		}
+		return compareModel.isFlag();
+
+	}
+
+	/**
+	 * Returns updated copy of alert list DTO which is to be set as the object
+	 * to be sent as request in update.
+	 * 
+	 * @return updated copy of alertlistDTO
+	 */
+	public BEAlertListDTO getUpdatedCopyOfAlertDTO() {
+		return updatedCopyOfAlertDTO;
+	}
+
+	/**
+	 * sets updated copy of alertlistDTO
+	 * 
+	 * @param updatedCopyOfAlertDTO
+	 */
+	public void setUpdatedCopyOfAlertDTO(BEAlertListDTO updatedCopyOfAlertDTO) {
+		this.updatedCopyOfAlertDTO = updatedCopyOfAlertDTO;
+	}
+
+	public BEConnectionList get_copyConnectionList() {
+		return _copyConnectionList;
+	}
+
+	/**
+	 * compares working copy with cached copy.
+	 * 
+	 * @return boolean based on comparison.
+	 */
+	public boolean compareConnectionList() {
+
+		BEConnectionList connectionList = BEDataCache.getSharedCache()
+				.get_connectionList();
+		BEConnectionList copyConnectionList = BEDataCache.getSharedCache()
+				.get_copyConnectionList();
+
+		BEComparisonModel compareModel = connectionList
+				.compare(copyConnectionList);
+		if (!compareModel.isFlag()) {
+			Gson gson = new GsonBuilder().create();
+
+			Log.i("Working", gson.toJson(connectionList));
+			Log.i("Copy", gson.toJson(copyConnectionList));
+			Log.i("Diff", gson.toJson(compareModel.getObject()));
+			set_updateConnectionList((BEConnectionList) compareModel
+					.getObject());
+
+		}
+		return compareModel.isFlag();
+
+	}
+
+	public void set_copyConnectionList(BEConnectionList _copyConnectionList) {
+		this._copyConnectionList = _copyConnectionList;
+	}
+
+	public BEConnectionList get_updateConnectionList() {
+		return _updateConnectionList;
+	}
+
+	public void set_updateConnectionList(BEConnectionList _updateConnectionList) {
+		this._updateConnectionList = _updateConnectionList;
+	}
+
+	public String getStatementTitle() {
+		return _statementTitle;
+	}
+
+	public void setStatementTitle(String statementTitle) {
+		this._statementTitle = statementTitle;
+	}
+
+	public ArrayList<BEGetRules> get_rulesDTOs() {
+		return _rulesDTOs;
+	}
+
+	public void set_rulesDTOs(ArrayList<BEGetRules> _rulesDTOs) {
+		this._rulesDTOs = _rulesDTOs;
+	}
+
+	public BEGetRuleConnections get_ruleConnections() {
+		return _ruleConnections;
+	}
+
+	public void set_ruleConnections(BEGetRuleConnections _ruleConnections) {
+		this._ruleConnections = _ruleConnections;
+	}
+
+	public BEMyProfile getCopyProfileInfo() {
+		return copyProfileInfo;
+	}
+
+	public void setCopyProfileInfo(BEMyProfile copyProfileInfo) {
+		this.copyProfileInfo = copyProfileInfo;
+	}
+
+
+	public int getStatementType() {
+		return statementType;
+	}
+
+	public void setStatementType(int statementType) {
+		this.statementType = statementType;
+	}
+
+	public BEGetRuleConnections get_updateRule() {
+		return _updateRule;
+	}
+
+	public void set_updateRule(BEGetRuleConnections _updateRule) {
+		this._updateRule = _updateRule;
+	}
+
+	public ArrayList<BENotification> get_notification() {
+		return _notification;
+	}
+
+	public void set_notification(ArrayList<BENotification> _notification) {
+		this._notification = _notification;
+	}
+
+	public String getStatementListHeading() {
+		return statementListHeading;
+	}
+
+	public void setStatementListHeading(String statementListHeading) {
+		this.statementListHeading = statementListHeading;
+	}
+
+
+	public String get_selectedDate() {
+		return _selectedDate;
+	}
+
+
+	public void set_selectedDate(String _selectedDate) {
+		this._selectedDate = _selectedDate;
+	}
+
+
+	public BasicCookieStore getCookieStore() {
+		return cookieStore;
+	}
+
+
+	public void setCookieStore(BasicCookieStore cookieStore) {
+		this.cookieStore = cookieStore;
+	}
+	public void clearDataFromCache() {
+
+		setSelectedDate(-2);
+		set_fromDate(null);
+		set_toDate(null);
+		clearHashMap();
+		setfolders(null);
+		set_ruleConnections(null);
+		setCopyProfileInfo(null);
+		setStatementType(-1);
+		set_updateRule(null);
+		set_notification(null);
+		setConnections(null);
+		set_rulesDTOs(null);
+		setAllBillEnableStatus(false);
+		set_statements(null);
+		set_connectionList(null);
+		set_alertListDTO(null);
+		setUpdatedCopyOfAlertDTO(null);
+		set_selectedDate(null);
+		set_copyConnectionList(null);
+		set_updateConnectionList(null);
+		set_rulesDTOs(null);
+	}
+
+
+}

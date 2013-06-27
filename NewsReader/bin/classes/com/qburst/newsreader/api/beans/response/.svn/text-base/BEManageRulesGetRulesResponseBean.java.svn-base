@@ -1,0 +1,20 @@
+package com.qburst.billexpress.api.beans.response;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BEGetRules;
+
+public class BEManageRulesGetRulesResponseBean extends BEBaseResponseBean{
+
+	private ArrayList<BEGetRules> rulesDTOs;
+
+	public ArrayList<BEGetRules> getRulesDTOs() {
+		return rulesDTOs;
+	}
+
+	public void setRulesDTOs(ArrayList<BEGetRules> rulesDTOs) {
+		this.rulesDTOs = rulesDTOs;
+	}
+	
+	
+}

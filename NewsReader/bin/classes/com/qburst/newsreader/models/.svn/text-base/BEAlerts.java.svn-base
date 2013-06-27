@@ -1,0 +1,89 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing data with Alerts details.
+ * 
+ */
+import java.util.ArrayList;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+public class BEAlerts {
+	private String alertType;
+	private ArrayList<BEBillers> billers;
+
+	public String getAlertType() {
+		return alertType;
+	}
+
+	public void setAlertType(String alertType) {
+		this.alertType = alertType;
+	}
+
+	public ArrayList<BEBillers> getBillers() {
+		return billers;
+	}
+
+	public void setBillers(ArrayList<BEBillers> billers) {
+		this.billers = billers;
+	}
+
+	public void setForBillStatus(boolean connectionStatus) {
+		ArrayList<BEBillers> billers = getBillers();
+		for (BEBillers biller : billers) {
+			biller.setForBillerLevelStatus(connectionStatus);
+		}
+	}
+
+	/**
+	 * @param alerts
+	 * copies received data to another object.
+	 */
+	public void copy(BEAlerts alerts) {
+		setAlertType(alerts.getAlertType());
+		setBillers(null);
+		ArrayList<BEBillers> copyBiller = new ArrayList<BEBillers>();
+		int count = alerts.getBillers().size();
+		for (int i = 0; i < count; i++) {
+			BEBillers copyBillers = new BEBillers();
+			copyBillers.copy(alerts.getBillers().get(i));
+			copyBiller.add(copyBillers);
+		}
+		setBillers(copyBiller);
+	}
+
+	/**
+	 * @param alert
+	 * @return object of comparison model
+	 * compares working copy and cached copy.
+	 */
+	public BEComparisonModel compare(BEAlerts alert) {
+		BEComparisonModel compareModel = new BEComparisonModel();
+		
+		BEAlerts diffAlert = new BEAlerts();
+		diffAlert.copy(this);
+		
+		boolean result = true;
+
+	
+		ArrayList<BEBillers> resultBillers = new ArrayList<BEBillers>();
+		int count = getBillers().size();
+		for (int i = 0; i < count; i++) {
+			BEBillers cBiller = alert.getBillers().get(i);
+			BEBillers biller = getBillers().get(i);
+			BEComparisonModel tModel = biller.compare(cBiller);
+			if (tModel.isFlag() == false) {
+				resultBillers.add((BEBillers) tModel.getObject());
+				result = false;
+
+			}
+		}
+		
+		diffAlert.setBillers(resultBillers);
+				
+		compareModel.setObject(diffAlert);
+		compareModel.setFlag(result);
+
+		return compareModel;
+	}
+}

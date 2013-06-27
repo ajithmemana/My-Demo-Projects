@@ -1,0 +1,28 @@
+package com.qburst.billexpress.api.beans.response;
+
+import java.io.InputStream;
+
+public class BEStatementPreviewResponseBean extends BEBaseResponseBean {
+
+	private InputStream statement;
+	private String payNowUrl;
+
+	public String getPayNowUrl() {
+		return payNowUrl;
+	}
+
+	public void setPayNowUrl(String payNowUrl) {
+		this.payNowUrl = payNowUrl;
+	}
+
+	public InputStream getStatement() {
+		return statement;
+	}
+
+	public void setStatement(InputStream statement) {
+		this.statement = statement;
+	}
+
+
+
+}

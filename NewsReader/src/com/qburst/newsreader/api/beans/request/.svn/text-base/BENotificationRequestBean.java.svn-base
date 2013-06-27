@@ -1,0 +1,15 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BENotificationRequestBean extends BESessionRequestBean{
+	
+	private Boolean isBeforeLogin;
+
+	public Boolean getIsBeforeLogin() {
+		return isBeforeLogin;
+	}
+
+	public void setIsBeforeLogin(Boolean isBeforeLogin) {
+		this.isBeforeLogin = isBeforeLogin;
+	}
+	
+}

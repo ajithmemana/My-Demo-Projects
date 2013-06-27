@@ -1,0 +1,21 @@
+package com.qburst.billexpress.api.beans.response;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BENotification;
+
+public class BENotificationResponseBean extends BEBaseResponseBean {
+	
+	private ArrayList<BENotification> broadcastMsg;
+
+	
+	public ArrayList<BENotification> getBroadcastMsg() {
+		return broadcastMsg;
+	}
+	public void setBroadcastMsg(ArrayList<BENotification> broadcastMsg) {
+		this.broadcastMsg = broadcastMsg;
+	}
+
+}
+
+

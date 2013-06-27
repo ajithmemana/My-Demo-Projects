@@ -1,0 +1,91 @@
+package com.qburst.billexpress.api;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+
+
+public class BEBaseApi {
+	private Object _errorMsgObject;
+	private Map<String, Object> _networkErrorResponse;
+	private Map<String, Object> _networkTimeoutErrorResponse;
+	private Map<String, Object> _internalServerErrorResponse;
+	private Map<String, Object> _authenticationErrorResponse;
+	BEExceptionApiListener _excptnListener;
+
+	/**
+	 * This function checks for specific network, internal server error  and network timeout related
+	 * errors and handles it by redirecting it to related listeners.
+	 * 
+	 * @param ResponseObject
+	 * @return void
+	 * 
+	 */
+	
+	public String baseUrl(){
+		return BEApiConstants.baseUrl;
+	}
+	
+	public void detectErrorMessage(Map<String, Object> response) {
+
+		Log.i("ERROR FOUND", "ENTERED DETECT-ERROR-MESSAGE");
+
+		if (response != null) {
+
+			_networkErrorResponse = new HashMap<String, Object>();
+			_networkTimeoutErrorResponse = new HashMap<String, Object>();
+			_internalServerErrorResponse = new HashMap<String, Object>();
+			_authenticationErrorResponse = new HashMap<String, Object>();
+
+			_errorMsgObject = response.get(BEApiConstants.kErrorMsgKey);
+			String networkErrorMessage = BEApiConstants.kNetworkErrorMessage;
+			String networkTimeoutErrorMessage = BEApiConstants.kNetworkTimeoutErrorMessage;
+			String internalServerErrorMessage = BEApiConstants.kInternalServerErrorMessage;
+			String authenticationErrorMessage = BEApiConstants.kAuthenticationErrorMessage;
+
+			
+			_networkErrorResponse.put(BEApiConstants.kApiFailedMsgKey,
+					networkErrorMessage);
+			_networkTimeoutErrorResponse.put(BEApiConstants.kApiFailedMsgKey,
+					networkTimeoutErrorMessage);
+			_internalServerErrorResponse.put(BEApiConstants.kApiFailedMsgKey,
+					internalServerErrorMessage);
+			_authenticationErrorResponse.put(BEApiConstants.kApiFailedMsgKey,
+					authenticationErrorMessage);
+
+			if (_errorMsgObject
+					.equals(BEApiConstants.kNetworkErrorExceptionKey)) {
+				_excptnListener
+						.onNetWorkUnavailableResponse(_networkErrorResponse);
+
+			} else if (_errorMsgObject
+					.equals(BEApiConstants.kTimeOutErrorExceptionKey)) {
+				_excptnListener
+						.onRequestTimedoutResponse(_networkTimeoutErrorResponse);
+
+			}else if (_errorMsgObject
+					.equals(BEApiConstants.kInvalidResponseError)) {
+				_excptnListener.onInternalServerErrorResponse(_internalServerErrorResponse);
+
+			}else if(_errorMsgObject
+					.equals(BEApiConstants.kInternalServerErrorExceptionKey)){
+				
+				_excptnListener.onInternalServerErrorResponse(_internalServerErrorResponse);
+			}else if(_errorMsgObject
+					.equals(BEApiConstants.kAuthenticationErrorExceptionKey)){
+				
+				_excptnListener.onAuthenticationErrorResponse(_authenticationErrorResponse);
+			} else if(_errorMsgObject.equals(BEApiConstants.kLargeContentErrorExceptionKey)){
+				_internalServerErrorResponse = new HashMap<String, Object>();
+				_internalServerErrorResponse.put(BEApiConstants.kApiFailedMsgKey,
+						BEApiConstants.kLargeContentProcessingErrorMessage);
+				_excptnListener.onInternalServerErrorResponse(_internalServerErrorResponse);
+			}
+		}
+	}
+
+	
+}

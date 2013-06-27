@@ -1,0 +1,95 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEUpdateProfileRequestBean;
+import com.qburst.billexpress.api.beans.response.BEUpdateProfileResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEUpdateProfileAPIListener;
+import com.qburst.billexpress.models.BEMyProfileData;
+/**
+*
+* API client end to retrieve UpdateProfile information.
+*  @author user
+*/
+public class BEUpdateProfileApi extends BEBaseApi implements BEApiListener {
+
+private BEUpdateProfileAPIListener _listener = null;
+	
+	public BEUpdateProfileApi(BEUpdateProfileAPIListener listener, BEExceptionApiListener exceptionlistener) {
+		
+		this._excptnListener = exceptionlistener;
+		this._listener = listener;
+		
+	}
+	
+	public void updateProfile(String sessionId, BEMyProfileData object) {
+		BEUpdateProfileRequestBean requestBean = new BEUpdateProfileRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setName(object.getName());
+		requestBean.setGender(object.getGender());
+		requestBean.setMaritalStatus(object.getMaritalStatus());
+		requestBean.setResidentialStatus(object.getResidentialStatus());
+		requestBean.setEmailAddress(object.getEmailAddress());
+		requestBean.setMobileNumber(object.getMobileNumber());
+		requestBean.setDOB(object.getDOB());
+		
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEUpdateProfileResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+
+	@Override
+	public String baseUrl(){
+		return super.baseUrl()+BEApiConstants.UpdateprofileUrl;
+	}
+	
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE", response.toString());
+		
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEUpdateProfileResponseBean respBean = (BEUpdateProfileResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			
+
+			if (respBean != null) {
+				
+				
+				if(_listener!=null){
+					_listener.profileUpdated();
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+	
+
+}

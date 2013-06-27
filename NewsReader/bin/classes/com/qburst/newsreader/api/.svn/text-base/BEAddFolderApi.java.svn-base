@@ -1,0 +1,87 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEAddFolderRequestBean;
+import com.qburst.billexpress.api.beans.response.BEAddFolderResponseBean;
+import com.qburst.billexpress.interfaces.BEAddFolderAPIListener;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+
+/**
+ * 
+ * API client end to retrieve add Folder information.
+ * 
+ * @author user
+ */
+public class BEAddFolderApi extends BEBaseApi implements BEApiListener {
+
+	BEAddFolderAPIListener _listener;
+
+	public BEAddFolderApi(BEAddFolderAPIListener listener,
+			BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+
+	public void addFolders(String sessionId, String folderId, String folderName,
+			String subfolderId, String subfolderName) {
+		BEAddFolderRequestBean requestBean = new BEAddFolderRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setFolderId(folderId);
+		requestBean.setFolderName(folderName);
+		requestBean.setSubFolderId(subfolderId);
+		requestBean.setSubFolderName(subfolderName);
+		requestBean.setSessionId(sessionId);
+		if (_listener != null) {
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this,
+				requestBean.toJsonString(), BEAddFolderResponseBean.class,
+				baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+
+	@Override
+	public String baseUrl() {
+		return super.baseUrl() + BEApiConstants.addFolderApi;
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE", response.toString());
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEAddFolderResponseBean respBean = (BEAddFolderResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {
+
+				if (_listener != null) {
+					_listener.addedFolders(respBean.getFolderId());
+				}
+
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+
+}

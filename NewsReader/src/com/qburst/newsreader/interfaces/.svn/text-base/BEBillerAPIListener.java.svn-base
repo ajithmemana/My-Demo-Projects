@@ -1,0 +1,17 @@
+package com.qburst.billexpress.interfaces;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BEBiller;
+
+/**
+ * @author user	
+ * Designs BillerAPI interface methods receivedBillers and
+ *         errorInBillerFetch.
+ */
+public interface BEBillerAPIListener extends BEBaseAPIListener {
+
+	public void receivedBillers(ArrayList<BEBiller> billers);
+
+	public void errorInBillerFetch();
+}

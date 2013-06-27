@@ -1,0 +1,222 @@
+package com.qburst.billexpress.models;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+
+/**
+ * @author user Model DAO for managing data with connection details.
+ * 
+ */
+public class BEConnections {
+	
+	private String connectionId;
+	private Boolean newStatement;
+	private String status;
+	private String senderCode;
+	private String billListId;
+	private String billSubject;
+	private Boolean hasConnected;
+	private Long retentionPeriod;
+	private String discontinueHardCopy;
+	private String uniqueBillIdentifier;
+	private String senderResponseStatus;
+	private String connectionDate;
+	private String effectiveDate;
+	private Boolean isFutureTypeFlag;
+	private String connectionDetails;
+	
+	
+
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getSenderCode() {
+		return senderCode;
+	}
+	public void setSenderCode(String senderCode) {
+		this.senderCode = senderCode;
+	}
+
+	public String getBillSubject() {
+		return billSubject;
+	}
+	public void setBillSubject(String billSubject) {
+		this.billSubject = billSubject;
+	}
+	public Boolean isHasConnected() {
+		return hasConnected;
+	}
+	public void setHasConnected(Boolean hasConnected) {
+		this.hasConnected = hasConnected;
+	}
+	public String getDiscontinueHardCopy() {
+		return discontinueHardCopy;
+	}
+	public void setDiscontinueHardCopy(String discontinueHardCopy) {
+		this.discontinueHardCopy = discontinueHardCopy;
+	}
+	public String getConnectionDate() {
+		return connectionDate;
+	}
+	public void setConnectionDate(String connectionDate) {
+		this.connectionDate = connectionDate;
+	}
+	public String getEffectiveDate() {
+		return effectiveDate;
+	}
+	public void setEffectiveDate(String effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+	public String getUniqueBillIdentifier() {
+		return uniqueBillIdentifier;
+	}
+	public void setUniqueBillIdentifier(String uniqueBillIdentifier) {
+		this.uniqueBillIdentifier = uniqueBillIdentifier;
+	}
+	public String getSenderResponseStatus() {
+		return senderResponseStatus;
+	}
+	public void setSenderResponseStatus(String senderResponseStatus) {
+		this.senderResponseStatus = senderResponseStatus;
+	}
+	public Boolean isFutureTypeFlag() {
+		return isFutureTypeFlag;
+	}
+	public void setFutureTypeFlag(Boolean isFutureTypeFlag) {
+		this.isFutureTypeFlag = isFutureTypeFlag;
+	}
+	
+
+	public void copy(BEConnections beConnections) {
+
+		setConnectionId(beConnections.getConnectionId());
+		setNewStatement(beConnections.getNewStatement());
+		setStatus(beConnections.getStatus());
+		setSenderCode(beConnections.getSenderCode());
+		setBillListId(beConnections.getBillListId());
+		setBillSubject(beConnections.getBillSubject());
+		setHasConnected(beConnections.isHasConnected());
+		setRetentionPeriod(beConnections.getRetentionPeriod());
+		setDiscontinueHardCopy(beConnections.getDiscontinueHardCopy());
+		setUniqueBillIdentifier(beConnections.getUniqueBillIdentifier());
+		setSenderResponseStatus(beConnections.getSenderResponseStatus());
+		setConnectionDate(beConnections.getConnectionDate());
+		setEffectiveDate(beConnections.getEffectiveDate());
+		setFutureTypeFlag(beConnections.isFutureTypeFlag());
+		setConnectionDetails(beConnections.getConnectionDetails());
+	
+	}
+	/**
+	 * @param copyConnections
+	 * @return BEComparisonModel object.
+	 */
+	public BEComparisonModel compare(BEConnections copyConnections) {
+
+		BEComparisonModel compareModel = new BEComparisonModel();
+		boolean result = true;
+		
+		BEConnections diffConnections = new BEConnections();
+		diffConnections.copy(this);
+		
+		if(BEUtility.compare(hasConnected, copyConnections.hasConnected)) {
+			diffConnections.setHasConnected(null);
+		} else {
+			result = false;
+		}
+		if(BEUtility.compare(connectionDetails, copyConnections.connectionDetails)) {
+			diffConnections.setConnectionDetails(null);
+		} else {
+			result = false;
+		}
+		if(BEUtility.compare(newStatement, copyConnections.newStatement)) {
+			diffConnections.setNewStatement(null);
+		} else {
+			result = false;
+		}
+		if(BEUtility.compare(status, copyConnections.status)) {
+			diffConnections.setStatus(null);
+		} else {
+			result = false;
+		}
+		
+		if(BEUtility.compare(billSubject, copyConnections.billSubject)) {
+			diffConnections.setBillSubject(null);
+		} else {
+			result = false;
+		}
+		if(BEUtility.compare(isFutureTypeFlag, copyConnections.isFutureTypeFlag)) {
+			diffConnections.setFutureTypeFlag(null);
+		} else {
+			result = false;
+		}
+		if(BEUtility.compare(retentionPeriod, copyConnections.retentionPeriod)) {
+			diffConnections.setRetentionPeriod(null);
+		} else {
+			result = false;
+		} 
+		if(BEUtility.compare(discontinueHardCopy, copyConnections.discontinueHardCopy )) {
+			diffConnections.setDiscontinueHardCopy(null);
+		} else {
+			result = false;
+		}
+//		if(BEUtility.compare(uniqueBillIdentifier, copyConnections.uniqueBillIdentifier)) {
+//			diffConnections.setUniqueBillIdentifier(null);
+//		} else {
+//			result = false;
+//		}
+		if(BEUtility.compare(senderResponseStatus, copyConnections.senderResponseStatus)) {
+			diffConnections.setSenderResponseStatus(null);
+		} else {
+			result = false;
+		}
+		if(BEUtility.compare(connectionDate, copyConnections.connectionDate)) {
+			diffConnections.setConnectionDate(null);
+		} else {
+			result = false;
+		}
+		if(BEUtility.compare(effectiveDate, copyConnections.effectiveDate)) {
+			diffConnections.setEffectiveDate(null);
+		} else {
+			result = false;
+		}
+		
+		
+		compareModel.setObject(diffConnections);
+		compareModel.setFlag(result);
+		return compareModel;
+		}
+	public String getBillListId() {
+		return billListId;
+	}
+	public void setBillListId(String billListId) {
+		this.billListId = billListId;
+	}
+	public Long getRetentionPeriod() {
+		return retentionPeriod;
+	}
+	public void setRetentionPeriod(Long retentionPeriod) {
+		this.retentionPeriod = retentionPeriod;
+	}
+	public String getConnectionId() {
+		return connectionId;
+	}
+	public void setConnectionId(String connectionId) {
+		this.connectionId = connectionId;
+	}
+	public String getConnectionDetails() {
+		return connectionDetails;
+	}
+	public void setConnectionDetails(String connectionDetails) {
+		this.connectionDetails = connectionDetails;
+	}
+	public Boolean getNewStatement() {
+		return newStatement;
+	}
+	public void setNewStatement(Boolean newStatement) {
+		this.newStatement = newStatement;
+	}
+
+}

@@ -1,0 +1,15 @@
+package com.qburst.billexpress.interfaces;
+
+import java.io.File;
+
+/**
+ * @author user Designed BEDownloadStatementAPI interface methods
+ *         downloadedStatement and errorInDownload.
+ */
+public interface BEDownloadStatementAPIListener extends BEBaseAPIListener {
+
+	public void downloadedStatement(File statement);
+
+	public void errorInDownload();
+
+}

@@ -1,0 +1,36 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing data with mailinfo.
+ */
+public class BEMailInfo {
+
+	private int allMailCount;
+	private int starredCount;
+	private int unreadCount;
+
+	public int getStarredCount() {
+		return starredCount;
+	}
+
+	public void setStarredCount(int starredCount) {
+		this.starredCount = starredCount;
+	}
+
+	public int getUnreadCount() {
+		return unreadCount;
+	}
+
+	public void setUnreadCount(int unreadCount) {
+		this.unreadCount = unreadCount;
+	}
+
+	public int getAllMailCount() {
+		return allMailCount;
+	}
+
+	public void setAllMailCount(int allMailCount) {
+		this.allMailCount = allMailCount;
+	}
+
+}

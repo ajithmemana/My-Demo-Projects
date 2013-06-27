@@ -1,0 +1,178 @@
+package com.qburst.billexpress.utilities;
+
+<<<<<<< .mine
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
+
+=======
+>>>>>>> .r1313
+import android.graphics.Bitmap;
+import android.os.Message;
+import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import com.qburst.billexpress.cache.BEDataCache;
+import com.qburst.billexpress.interfaces.BELoginListener;
+
+/**
+ * @author user Web view client to listen SSO page events such as
+ *         Pageload,pageFinished,Received error etc.
+ */
+public class BELoginWebViewClient extends WebViewClient {
+
+	private BELoginListener _listener = null;
+	private String successUrl = "https://mail.google.com/mail/x";
+	private String redirectoinUrl = "";
+	private String failureUrl = "https://accounts.google.com/ServiceLoginAuth";
+	private String deactivateUrl = "";
+	private String multipleLoginUrl;
+	public BELoginWebViewClient(BELoginListener listener) {
+
+		_listener = listener;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.webkit.WebViewClient#shouldOverrideUrlLoading(android.webkit.
+	 * WebView, java.lang.String)
+	 */
+	@Override
+	public boolean shouldOverrideUrlLoading(WebView view, String url) {
+		Log.w("override ", " " + url);
+
+		// Need to check whether the url is login url. And for all other urls
+		// return true.
+
+		if (url.contains("https://accounts.google.com/NewAccount?btmpl=mobile")) {
+			// This will request the url in external browser.
+			_listener.loadInBrowser(url);
+			return true;
+		} else if (url.contains("https://www.google.com/accounts/recovery")) {
+			_listener.loadInBrowser(url);
+			return true;
+		} else {
+			return super.shouldOverrideUrlLoading(view, url);
+		}
+
+	}
+
+	@Override
+	public void onPageFinished(WebView view, String url) {
+		if (_listener != null) {
+			_listener.pageLoadDidFinish();
+		}
+		// Log.w("substring url", url.substring(0,31));
+		Log.w("URL Finish", " " + url);
+
+		// Here check whether the url is success redirection url.
+		if (url.contains("https://mail.google.com/mail/x")) {
+			// Get the cookie using Domain name.
+			// This cookie needs to be set to HttpClient for Api request.
+			String c = CookieManager.getInstance().getCookie(
+					"accounts.google.com");
+
+			Log.d("Cookie", c);
+			Log.w("Loged in success", " " + url);
+		//	_listener.userLoggedInSuccessfully();
+		} else if (url.contains("https://accounts.google.com/ServiceLoginAuth")) {
+			Log.i("same page", "com/ServiceLoginAuth");
+			// _listener.pageLoadDidFinish();
+		} else {
+			//_listener.pageLoadDidFinish();
+			// _listener.userLoggedInSuccessfully();
+			// _listener.loadInBrowser(url);
+		}
+		
+		super.onPageFinished(view, url);
+	}
+
+	// @Override
+	// public void onPageStarted(WebView view, String url, Bitmap favicon) {
+	// Log.w("URL", "START: " + url);
+	// if (_listener != null) {
+	// // Add code for success url here
+	// if (url.equalsIgnoreCase("https://accounts.google.com/ServiceLoginAuth"))
+	// {
+	// // _listener.userLoggedInSuccessfully();
+	// Log.w("Status", "password invalid:" + url);
+	// // _listener.loadInBrowser(url);
+	// } else if (url.equalsIgnoreCase("deatcivate url")) {
+	// // Do the needed redirection
+	// _listener.pageLoadDidStart();
+	// } else if (url.equalsIgnoreCase("Multiple login url")) {
+	// // Do the needed redirection
+	// _listener.pageLoadDidStart();
+	// }
+	// super.onPageStarted(view, url, favicon);
+	// }
+	// }
+
+	@Override
+	public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		Log.w("URL", "START: " + url);
+		if (url.contains("https://mail.google.com/mail/x")) {
+			// Get the cookie using Domain name.
+			// This cookie needs to be set to HttpClient for Api request.
+			String cookie = CookieManager.getInstance().getCookie(
+					"accounts.google.com");
+			BasicCookieStore cookieJar = new BasicCookieStore();
+			if(!cookie.equals("")){
+				String[] cookies = cookie.split(";");
+				for(int i=0; i< cookies.length; i++){
+					String[] nvp = cookies[i].split("=");
+					BasicClientCookie c = new BasicClientCookie(nvp[0], nvp[1]);
+					c.setDomain("");
+					cookieJar.addCookie(c);
+				}
+				}
+			BEDataCache.getSharedCache().setCookieStore(cookieJar);
+			Log.d("Cookie", cookie);
+			Log.w("Loged in success", " " + url);
+			_listener.userLoggedInSuccessfully();
+		} else if (url.contains("https://mail.google.com/mail/x")) {
+			// Get the cookie using Domain name.
+			// This cookie needs to be set to HttpClient for Api request.
+			String c = CookieManager.getInstance().getCookie(
+					"accounts.google.com");
+
+			Log.d("Cookie", c);
+			Log.w("Loged in success", " " + url);
+			_listener.userLoggedInSuccessfully();
+		} else if (url.contains("https://accounts.google.com/ServiceLoginAuth")) {
+			Log.i("same page", "com/ServiceLoginAuth");
+			// _listener.pageLoadDidFinish();
+		} else if (url.equalsIgnoreCase("deatcivate url")) {
+			// Do the needed redirection
+		} else if (url.equalsIgnoreCase("Multiple login url")) {
+			// Do the needed redirection
+			// _listener.pageLoadDidStart();
+		} else {
+			_listener.pageLoadDidFinish();
+			// _listener.userLoggedInSuccessfully();
+			// _listener.loadInBrowser(url);
+		}
+		super.onPageStarted(view, url, favicon);
+
+	}
+
+	@Override
+	public void onReceivedError(WebView view, int errorCode,
+			String description, String failingUrl) {
+		if (_listener != null) {
+			_listener.networkErrorOccured();
+		}
+		super.onReceivedError(view, errorCode, description, failingUrl);
+	}
+
+	@Override
+	public void onFormResubmission(WebView view, Message dontResend,
+			Message resend) {
+		// TODO Auto-generated method stub
+		super.onFormResubmission(view, dontResend, resend);
+	}
+
+}

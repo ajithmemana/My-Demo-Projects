@@ -1,0 +1,14 @@
+package com.qburst.billexpress.interfaces;
+
+import com.qburst.billexpress.models.BEMailInfo;
+
+/**
+ * @author user Designs interface methods mailCountInfoReceived and
+ *         errorInMailCountFetch.
+ */
+public interface BEMailApiListener extends BEBaseAPIListener {
+
+	public void mailCountInfoReceived(BEMailInfo mailInfo);
+
+	public void errorInMailCountFetch();
+}

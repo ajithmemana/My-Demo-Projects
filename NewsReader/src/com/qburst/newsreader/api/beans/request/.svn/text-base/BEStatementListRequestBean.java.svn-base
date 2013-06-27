@@ -1,0 +1,111 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BEStatementListRequestBean extends BESessionRequestBean {
+
+	
+	private String filterName;
+	private String filterCategory;
+	private long startIndex;
+	private long endIndex;
+	private String startDateRange;
+	private String endDateRange;
+	private String searchString;
+	public String getFilterName() {
+		return filterName;
+	}
+	public void setFilterName(String filterName) {
+		this.filterName = filterName;
+	}
+	public String getFilterCategory() {
+		return filterCategory;
+	}
+	public void setFilterCategory(String filterCategory) {
+		this.filterCategory = filterCategory;
+	}
+	public long getStartIndex() {
+		return startIndex;
+	}
+	public void setStartIndex(long startIndex) {
+		this.startIndex = startIndex;
+	}
+	public long getEndIndex() {
+		return endIndex;
+	}
+	public void setEndIndex(long endIndex) {
+		this.endIndex = endIndex;
+	}
+	public String getStartDateRange() {
+		return startDateRange;
+	}
+	public void setStartDateRange(String startDateRange) {
+		this.startDateRange = startDateRange;
+	}
+	public String getEndDateRange() {
+		return endDateRange;
+	}
+	public void setEndDateRange(String endDateRange) {
+		this.endDateRange = endDateRange;
+	}
+	public String getSearchString() {
+		return searchString;
+	}
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
+	
+	
+//	private String sessionId;
+//	private String fromDate;
+//	private String toDate;
+//	private String mailType;
+//	private long billerId;
+//	private long folderId;
+//	private String searchText;
+//	
+//
+//	public String getSessionId() {
+//		return sessionId;
+//	}
+//	public void setSessionId(String sessionId) {
+//		this.sessionId = sessionId;
+//	}
+//	public String getFromDate() {
+//		return fromDate;
+//	}
+//	public void setFromDate(String fromDate) {
+//		this.fromDate = fromDate;
+//	}
+//	public String getToDate() {
+//		return toDate;
+//	}
+//	public void setToDate(String toDate) {
+//		this.toDate = toDate;
+//	}
+//	public String getMailType() {
+//		return mailType;
+//	}
+//	public void setMailType(String mailType) {
+//		this.mailType = mailType;
+//	}
+//	public long getBillerId() {
+//		return billerId;
+//	}
+//	public void setBillerId(long billerId) {
+//		this.billerId = billerId;
+//	}
+//	public long getFolderId() {
+//		return folderId;
+//	}
+//	public void setFolderId(long folderId) {
+//		this.folderId = folderId;
+//	}
+//	public String getSearchText() {
+//		return searchText;
+//	}
+//	public void setSearchText(String searchText) {
+//		this.searchText = searchText;
+//	}
+	
+
+	
+}

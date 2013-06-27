@@ -1,0 +1,24 @@
+package com.qburst.billexpress.api.beans.response;
+
+public class BEToggleStarResponseBean extends BEBaseResponseBean {
+
+	private int statusCode;
+	private String statusString;
+
+	public int getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	public String getStatusString() {
+		return statusString;
+	}
+
+	public void setStatusString(String statusString) {
+		this.statusString = statusString;
+	}
+
+}

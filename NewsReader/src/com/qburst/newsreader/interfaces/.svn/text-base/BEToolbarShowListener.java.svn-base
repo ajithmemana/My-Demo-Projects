@@ -1,0 +1,5 @@
+package com.qburst.billexpress.interfaces;
+
+public interface BEToolbarShowListener {
+	public void showToolbar(boolean wantToShow);
+}

@@ -1,0 +1,90 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEGetProfileDetailsRequestBean;
+import com.qburst.billexpress.api.beans.response.BEGetProfileDetailsResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEGetProfileDetailsAPIListener;
+import com.qburst.billexpress.models.BEMyProfile;
+/**
+*
+* API client end to retrieve User Profile Details.
+*  @author user
+*/
+public class BEGetProfileDetailsApi extends BEBaseApi implements BEApiListener{
+
+	
+	BEGetProfileDetailsAPIListener _listener;
+	public BEGetProfileDetailsApi(BEGetProfileDetailsAPIListener listener,BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+	public void getProfile(String sessionId){
+		BEGetProfileDetailsRequestBean requestBean = new BEGetProfileDetailsRequestBean();
+      	requestBean.setSessionId(sessionId);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEGetProfileDetailsResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+	@Override
+	public String baseUrl(){
+		return super.baseUrl()+BEApiConstants.getMyProfileDetailsUrl;
+	}
+	
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEGetProfileDetailsResponseBean respBean = (BEGetProfileDetailsResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {				
+				
+			BEMyProfile myProfile = new BEMyProfile();
+			myProfile.setName(respBean.getName());
+			myProfile.setGender(respBean.getGender());
+			myProfile.setMaritalStatus(respBean.getMaritalStatus());
+			myProfile.setResidentialStatus(respBean.getResidentialStatus());
+			myProfile.setUserName(respBean.getUserName());
+			myProfile.setEmailAddress(respBean.getEmailAddress());
+			myProfile.setMobileNumber(respBean.getMobileNumber());
+			myProfile.setDOB(respBean.getDOB());
+				if(_listener!=null){
+				
+					_listener.profileDataReceived(myProfile);
+					
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		_listener.errorInProfileApi();
+		detectErrorMessage(errorResponse);
+	}
+
+}

@@ -1,0 +1,27 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing data with object comparison.
+ * 
+ */
+public class BEComparisonModel {
+	private boolean flag;
+	private Object object;
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+	public Object getObject() {
+		return object;
+	}
+
+	public void setObject(Object object) {
+		this.object = object;
+	}
+
+}

@@ -1,0 +1,144 @@
+package com.qburst.billexpress.utilities;
+
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
+
+import android.graphics.Bitmap;
+import android.net.http.SslError;
+import android.os.Message;
+import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import com.qburst.billexpress.cache.BEDataCache;
+import com.qburst.billexpress.interfaces.BELoginListener;
+
+/**
+ * @author user Web view client to listen SSO page events such as
+ *         Pageload,pageFinished,Received error etc.
+ */
+public class BELoginWebViewClient extends WebViewClient {
+
+	private BELoginListener _listener = null;
+	// TODO: Change below constants as required.
+	private static final String SUCCESS_URL = "https://accounts.google.com/CheckCookie?chtml=LoginDoneHtml";
+	@SuppressWarnings("unused")
+	private static final String REDIRECTION_URL = "https://accounts.google.com/NewAccount?btmpl=mobile";
+	private static final String FAILURE_URL = "https://accounts.google.com/ServiceLoginAuth";
+	private static final String DEACTIVATE_URL = "";
+	private static final String MULTIPLE_LOGIN_URL = "";
+	@SuppressWarnings("unused")
+	private static final String LOGIN_URL = "https://accounts.google.com/Login";
+	private static final String DOMAIN_NAME = "accounts.google.com";
+
+	public BELoginWebViewClient(BELoginListener listener) {
+
+		_listener = listener;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.webkit.WebViewClient#shouldOverrideUrlLoading(android.webkit.
+	 * WebView, java.lang.String)
+	 */
+	@Override
+	public boolean shouldOverrideUrlLoading(WebView view, String url) {
+		Log.i("Override url ", " " + url);
+
+		// Need to check whether the url is login url. And for all other urls
+		// return true.
+
+		if (url.contains(SUCCESS_URL)) {
+			// This will request the url in external browser.
+			// _listener.loadInBrowser(url);
+			_listener.userLoggedInSuccessfully();
+			return true;
+		}
+		// TODO: Handle redirection cases here. Note to change
+		// url.equalsIgnoreCase() or url.contains() as required.
+		else if (url.equalsIgnoreCase(DEACTIVATE_URL)
+				|| url.equalsIgnoreCase(MULTIPLE_LOGIN_URL)
+				|| url.contains(FAILURE_URL)) {
+			Log.i("Redirection url ", " " + url);
+			return super.shouldOverrideUrlLoading(view, url);
+
+		} else if (url.contains("https://accounts.google.com/RecoverAccount")) {
+			_listener.newUserLogin();
+			return true;
+		} else {
+
+			Log.i("External browser url ", " " + url);
+
+			_listener.loadInBrowser(url);
+			return true;
+
+		}
+
+	}
+	@Override
+	public void onReceivedSslError(WebView view, SslErrorHandler handler,
+			SslError error) {
+
+		handler.proceed(); // Ignore SSL certificate errors
+	}
+	@Override
+	public void onPageFinished(WebView view, String url) {
+		if (_listener != null) {
+			_listener.pageLoadDidFinish();
+		}
+
+		super.onPageFinished(view, url);
+	}
+
+	@Override
+	public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		Log.i("URL", "START: " + url);
+		if (url.contains(SUCCESS_URL)) {
+			// Get the cookie using Domain name.
+			// This cookie needs to be set to HttpClient for Api request.
+			String cookie = CookieManager.getInstance().getCookie(DOMAIN_NAME);
+			BasicCookieStore cookieJar = new BasicCookieStore();
+			if (!cookie.equals("")) {
+				String[] cookies = cookie.split(";");
+				for (int i = 0; i < cookies.length; i++) {
+					String[] nvp = cookies[i].split("=");
+					BasicClientCookie c = new BasicClientCookie(nvp[0], nvp[1]);
+					c.setDomain(DOMAIN_NAME);
+					cookieJar.addCookie(c);
+				}
+			} else {
+				Log.i("Cookie not retrieved", url);
+			}
+			// During logout cache will be cleared and this cookie also will be
+			// cleared.
+			BEDataCache.getSharedCache().setCookieStore(cookieJar);
+			Log.i("Cookie", cookie);
+			Log.i("Login success", " " + url);
+
+		}
+
+		super.onPageStarted(view, url, favicon);
+
+	}
+
+	@Override
+	public void onReceivedError(WebView view, int errorCode,
+			String description, String failingUrl) {
+		if (_listener != null) {
+			_listener.networkErrorOccured();
+		}
+		super.onReceivedError(view, errorCode, description, failingUrl);
+	}
+
+	@Override
+	public void onFormResubmission(WebView view, Message dontResend,
+			Message resend) {
+		// TODO Auto-generated method stub
+		super.onFormResubmission(view, dontResend, resend);
+	}
+
+}

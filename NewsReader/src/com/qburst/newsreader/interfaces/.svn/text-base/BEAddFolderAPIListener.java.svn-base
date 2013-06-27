@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designs AddFolderApi interface methods addedFolders and
+ *         errorInFolderAddition.
+ */
+public interface BEAddFolderAPIListener extends BEBaseAPIListener {
+
+	public void addedFolders(String folderId);
+
+	public void errorInFolderAddition();
+
+}

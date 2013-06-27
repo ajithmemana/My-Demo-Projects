@@ -1,0 +1,99 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+/**
+ * @author user Model DAO for managing statement data.
+ */
+public class BEStatement {
+
+	private long msgId;
+	private long folderId;
+	private String name;
+	private String dueDate;
+	private boolean forwarded;
+	private String senderCode;
+	private String received;
+	private boolean flagged;
+	private String status;
+	private String actionUrl;
+	private String parentId;
+	private ArrayList<BEStatement> packageList;
+	
+	
+	public long getMsgId() {
+		return msgId;
+	}
+	public void setMsgId(long msgId) {
+		this.msgId = msgId;
+	}
+	public long getFolderId() {
+		return folderId;
+	}
+	public void setFolderId(long folderId) {
+		this.folderId = folderId;
+	}
+	public String getDueDate() {
+		return dueDate;
+	}
+	public void setDueDate(String dueDate) {
+		this.dueDate = dueDate;
+	}
+	public boolean isForwarded() {
+		return forwarded;
+	}
+	public void setForwarded(boolean forwarded) {
+		this.forwarded = forwarded;
+	}
+	public String getSenderCode() {
+		return senderCode;
+	}
+	public void setSenderCode(String senderCode) {
+		this.senderCode = senderCode;
+	}
+	
+	public boolean isFlagged() {
+		return flagged;
+	}
+	public void setFlagged(boolean flagged) {
+		this.flagged = flagged;
+	}
+	
+	public String getActionUrl() {
+		return actionUrl;
+	}
+	public void setActionUrl(String actionUrl) {
+		this.actionUrl = actionUrl;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getReceived() {
+		return received;
+	}
+	public void setReceived(String received) {
+		this.received = received;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+	public ArrayList<BEStatement> getPackageList() {
+		return packageList;
+	}
+	public void setPackageList(ArrayList<BEStatement> packageList) {
+		this.packageList = packageList;
+	}
+
+}

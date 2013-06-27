@@ -1,0 +1,31 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing data with biller level alert details.
+ * 
+ */
+public class BEBillTypeAlertDetail {
+	private int billTypeId;
+	private String billTypeName;
+	private boolean billTypeAlertStatus;
+	public int getBillTypeId() {
+		return billTypeId;
+	}
+	public void setBillTypeId(int billTypeId) {
+		this.billTypeId = billTypeId;
+	}
+	public String getBillTypeName() {
+		return billTypeName;
+	}
+	public void setBillerTypeName(String billTypeName) {
+		this.billTypeName = billTypeName;
+	}
+	public boolean isBillTypeAlertStatus() {
+		return billTypeAlertStatus;
+	}
+	public void setBillTypeAlertStatus(boolean billTypeAlertStatus) {
+		this.billTypeAlertStatus = billTypeAlertStatus;
+	}
+	
+	
+}

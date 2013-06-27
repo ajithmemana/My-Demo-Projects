@@ -1,0 +1,17 @@
+package com.qburst.billexpress.interfaces;
+
+import java.util.Map;
+
+/**
+ * @author user
+ * 
+ * Designed  methods onResponseReceived and onFailedToGetResponse.
+ *
+ */
+public interface BEApiListener {
+	
+	public void onResponseReceived(Map<String, Object> response);
+    public void onFailedToGetResponse(Map<String, Object> errorResponse);
+   
+    
+}

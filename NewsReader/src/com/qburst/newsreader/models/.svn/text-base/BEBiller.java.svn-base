@@ -1,0 +1,36 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing data with biller.
+ */
+public class BEBiller {
+
+	private String billerId;
+	private String billerName;
+	private int unreadCount;
+
+	public String getBillerId() {
+		return billerId;
+	}
+
+	public void setBillerId(String billerId) {
+		this.billerId = billerId;
+	}
+
+	public String getBillerName() {
+		return billerName;
+	}
+
+	public void setBillerName(String billerName) {
+		this.billerName = billerName;
+	}
+
+	public int getUnreadCount() {
+		return unreadCount;
+	}
+
+	public void setUnreadCount(int unreadCount) {
+		this.unreadCount = unreadCount;
+	}
+
+}

@@ -1,0 +1,31 @@
+package com.qburst.billexpress.api.beans.request;
+
+import java.util.ArrayList;
+
+public class BEMoveToFolderRequestBean extends BESessionRequestBean{
+
+	private ArrayList <Long> statementIds;
+	private String srcFolderId;
+	private String destFolderId;	
+	
+	public String getSrcFolderId() {
+		return srcFolderId;
+	}
+	public void setSrcFolderId(String srcFolderId) {
+		this.srcFolderId = srcFolderId;
+	}
+	public ArrayList <Long> getStatementIds() {
+		return statementIds;
+	}
+	public void setStatementIds(ArrayList <Long> statementIds) {
+		this.statementIds = statementIds;
+	}
+	public String getDestFolderId() {
+		return destFolderId;
+	}
+	public void setDestFolderId(String destFolderId) {
+		this.destFolderId = destFolderId;
+	}
+	
+	
+}

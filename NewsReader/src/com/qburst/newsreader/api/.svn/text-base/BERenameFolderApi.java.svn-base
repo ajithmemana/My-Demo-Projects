@@ -1,0 +1,87 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BERenameFolderRequestBean;
+import com.qburst.billexpress.api.beans.response.BERenameFolderResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BERenameFolderAPIListener;
+
+/**
+ * 
+ * API client end to retrieve rename Folder information.
+ * 
+ * @author user
+ */
+public class BERenameFolderApi extends BEBaseApi implements BEApiListener {
+
+	BERenameFolderAPIListener _listener;
+
+	public BERenameFolderApi(BERenameFolderAPIListener listener,
+			BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+
+	public void renameFolders(String sessionId, String folderId, String text,
+			String subfolderId, String subfolderName) {
+
+		BERenameFolderRequestBean requestBean = new BERenameFolderRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setFolderId(folderId);
+		requestBean.setFolderName(text);
+		requestBean.setSubFolderId(subfolderId);
+		requestBean.setSubFolderName(subfolderName);
+
+		if (_listener != null) {
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this,
+				requestBean.toJsonString(), BERenameFolderResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+
+	@Override
+	public String baseUrl() {
+		return super.baseUrl() + BEApiConstants.renameFolderUrl;
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSEdfgdfgd", response.toString());
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BERenameFolderResponseBean respBean = (BERenameFolderResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {
+
+				if (_listener != null) {
+					_listener.renamedSuccessfully();
+				}
+
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+
+}

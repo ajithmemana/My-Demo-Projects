@@ -1,0 +1,84 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+/**
+ * @author user Model DAO for managing data with connection.
+ * 
+ */
+public class BEConnection {
+
+	private long billerId;
+	private String billerName;
+	private long billTypeCount;
+	private String billerAllBillTypeTandCUrl;
+	private boolean billerAllBillEnableStatus;
+	private String futureAllBillTypeTandCUrl;
+	private boolean futureAllBillEnableStatus;
+	private ArrayList<BEBillTypeDetails> billTypeDetails;
+
+	public long getBillerId() {
+		return billerId;
+	}
+
+	public void setBillerId(long billerId) {
+		this.billerId = billerId;
+	}
+
+	public String getBillerName() {
+		return billerName;
+	}
+
+	public void setBillerName(String billerName) {
+		this.billerName = billerName;
+	}
+
+	public long getBillTypeCount() {
+		return billTypeCount;
+	}
+
+	public void setBillTypeCount(long billTypeCount) {
+		this.billTypeCount = billTypeCount;
+	}
+
+	public String getBillerAllBillTypeTandCUrl() {
+		return billerAllBillTypeTandCUrl;
+	}
+
+	public void setBillerAllBillTypeTandCUrl(String billerAllBillTypeTandCUrl) {
+		this.billerAllBillTypeTandCUrl = billerAllBillTypeTandCUrl;
+	}
+
+	public String getFutureAllBillTypeTandCUrl() {
+		return futureAllBillTypeTandCUrl;
+	}
+
+	public void setFutureAllBillTypeTandCUrl(String futureAllBillTypeTandCUrl) {
+		this.futureAllBillTypeTandCUrl = futureAllBillTypeTandCUrl;
+	}
+
+	public ArrayList<BEBillTypeDetails> getBillTypeDetails() {
+		return billTypeDetails;
+	}
+
+	public void setBillTypeDetails(ArrayList<BEBillTypeDetails> billTypeDetails) {
+		this.billTypeDetails = billTypeDetails;
+	}
+
+	public boolean isBillerAllBillEnableStatus() {
+		return billerAllBillEnableStatus;
+	}
+
+	public void setBillerAllBillEnableStatus(boolean billerAllBillEnableStatus) {
+		this.billerAllBillEnableStatus = billerAllBillEnableStatus;
+	}
+
+	public boolean isFutureAllBillEnableStatus() {
+		return futureAllBillEnableStatus;
+	}
+
+	public void setFutureAllBillEnableStatus(boolean futureAllBillEnableStatus) {
+		this.futureAllBillEnableStatus = futureAllBillEnableStatus;
+	}
+
+}

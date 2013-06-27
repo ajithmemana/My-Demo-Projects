@@ -1,0 +1,83 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BESessionRequestBean;
+import com.qburst.billexpress.api.beans.response.BEMenuResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEMenuApiListener;
+/**
+*
+* API client end to retrieve Menu details.
+*  @author user
+*/
+public class BEMenuApi extends BEBaseApi implements BEApiListener {
+	
+	private BEMenuApiListener _listener;
+	
+	public BEMenuApi(BEMenuApiListener listener, BEExceptionApiListener exceptionListener){
+		this._listener = listener;
+		this._excptnListener = exceptionListener;
+	}
+	
+	public void getMenuDetails(String sessionId){
+	
+		BESessionRequestBean requestBean = new BESessionRequestBean();
+		requestBean.setSessionId(sessionId);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEMenuResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}	
+	
+	
+	@Override
+	public String baseUrl() {
+		// TODO Auto-generated method stub
+		return super.baseUrl()+BEApiConstants.menuUrl;
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEMenuResponseBean respBean = (BEMenuResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {				
+				
+				if(_listener!=null){
+					_listener.didFetchMenuNavigations(respBean.getNavigations());
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				if(_listener!=null){
+					_listener.didFailToFetchMenu();
+				}
+			}
+		}
+		
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+
+}

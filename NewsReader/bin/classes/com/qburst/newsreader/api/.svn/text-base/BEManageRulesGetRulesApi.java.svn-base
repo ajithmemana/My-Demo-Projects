@@ -1,0 +1,93 @@
+package com.qburst.billexpress.api;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BESessionRequestBean;
+import com.qburst.billexpress.api.beans.response.BEManageRulesGetRulesResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEGetRulesApiListener;
+import com.qburst.billexpress.models.BEGetRules;
+/**
+*
+* API client end to retrieve Rules details.
+*  @author user
+*/
+public class BEManageRulesGetRulesApi extends BEBaseApi implements BEApiListener{
+	
+	
+	private BEGetRulesApiListener _listener;
+	
+	public BEManageRulesGetRulesApi(BEGetRulesApiListener listener, BEExceptionApiListener exceptionListener){
+		this._listener = listener;
+		this._excptnListener = exceptionListener;
+	}
+	
+	public void getRules(String sessionId){
+	
+		BESessionRequestBean requestBean = new BESessionRequestBean();
+		requestBean.setSessionId(sessionId);
+		
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEManageRulesGetRulesResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}	
+	
+	
+	@Override
+	public String baseUrl() {
+		// TODO Auto-generated method stub
+		return super.baseUrl()+BEApiConstants.getRulesUrl;
+	}
+	
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+
+		Log.i("RESPONSE for BEStatement", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEManageRulesGetRulesResponseBean respBean = (BEManageRulesGetRulesResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {				
+				
+				ArrayList<BEGetRules> rulesDTOs = respBean.getRulesDTOs();
+				Log.i("STATEMENT API", rulesDTOs.size()+"");
+				if(_listener!=null){
+					_listener.receivedGetRulesResponse(rulesDTOs);
+				}
+				
+			}
+		}else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+		
+		
+		
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		_listener.errorInGettingRules();
+		detectErrorMessage(errorResponse);
+	}
+
+}

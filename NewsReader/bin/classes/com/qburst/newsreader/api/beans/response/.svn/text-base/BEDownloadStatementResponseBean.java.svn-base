@@ -1,0 +1,15 @@
+package com.qburst.billexpress.api.beans.response;
+
+public class BEDownloadStatementResponseBean extends BEBaseResponseBean {
+
+	private String binary;
+
+	public String getBinary() {
+		return binary;
+	}
+
+	public void setBinary(String binary) {
+		this.binary = binary;
+	}
+
+}

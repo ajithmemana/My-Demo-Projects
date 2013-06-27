@@ -1,0 +1,7 @@
+package com.qburst.billexpress.interfaces;
+
+public interface BEUpdateReadStatusApiListener extends BEBaseAPIListener {
+
+	public void updatedReadStatus();
+	public void errorInUpdatinugreadStatus();	
+}

@@ -1,0 +1,246 @@
+package com.qburst.billexpress.activities;
+
+import java.util.Map;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+
+import com.qburst.billexpress.app.BEConstants;
+import com.qburst.billexpress.cache.BEDataCache;
+import com.qburst.billexpress.interfaces.BEBaseAPIListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * @author user Base Activity Class to handle base events and to enable base
+ *         error and content loading logic.
+ */
+
+public class BEBaseActivity extends Activity implements BEBaseAPIListener,
+		BEExceptionApiListener {
+
+	ProgressDialog _progressDialogue;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+
+	}
+
+	/**
+	 * @param v
+	 *            Specify the action of Settings button.
+	 */
+	public void settingsClicked(View v) {
+
+	}
+
+	/**
+	 * @param v
+	 *            Specify the action of Logout button.
+	 */
+	
+
+//	/**
+//	 * @param menu
+//	 * @return
+//	 */
+//	public boolean onGroupCreateOptionsMenu(Menu menu) {
+//		int menuId = getMenuId();
+//		if (menuId != 0) {
+//
+//			MenuInflater inflater = getMenuInflater();
+//			inflater.inflate(menuId, menu);
+//			setMenuBackground();
+//		}
+//		return (menuId != 0) ? true : false;
+//	}
+
+	/*
+	 * (non-Javadoc) Sets the options menu with the created menu items.
+	 * 
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		int menuId = getMenuId();
+		if (menuId != 0) {
+
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(menuId, menu);
+			//setMenuBackground();
+		}
+		return menuId != 0;
+
+	}
+
+//	public boolean onGroupOptionsItemSelected(MenuItem item) {
+//		// Handle item selection
+//		/**
+//		 * Child class should override this method. Following code is handled
+//		 * for home screen menu selection.
+//		 */
+//
+//		return true;
+//	}
+
+	/**
+	 * To set background image for the menu.
+	 */
+//	protected void setMenuBackground() {
+//
+//		try {
+//			getLayoutInflater().setFactory(new Factory() {
+//
+//				@Override
+//				public View onCreateView(final String name,
+//						final Context context, final AttributeSet attrs) {
+//
+//					if (name.equalsIgnoreCase("com.android.internal.view.menu.IconMenuItemView")) {
+//
+//						try { // Ask our inflater to create the view
+//							final LayoutInflater f = getLayoutInflater();
+//							final View[] view = new View[1];
+//							try {
+//								view[0] = f.createView(name, null, attrs);
+//							} catch (InflateException e) {
+//								BEXMLInflateUtility.overrideMenuLayout(name,
+//										attrs, f, view);
+//							}
+//							// Kind of apply our own background
+//							new Handler().post(new Runnable() {
+//								public void run() {
+//									view[0].setBackgroundResource(R.drawable.header_gradient);
+//
+//								}
+//							});
+//							return view[0];
+//						} catch (InflateException e) {
+//						} catch (ClassNotFoundException e) {
+//
+//						}
+//					}
+//					return null;
+//				}
+//			});
+//		} catch (IllegalStateException e) {
+//			Log.w("Menu Color Fix", "Exception Catched Successfully");
+//		}
+//
+//	}
+
+	@Override
+	public void requestDidStart() {
+		if (_progressDialogue != null) {
+			if (_progressDialogue.isShowing()) {
+				_progressDialogue.dismiss();
+			}
+		}
+		_progressDialogue = BEUtility.showProgressDialog(this);
+
+	}
+
+	@Override
+	public void requestDidFinish() {
+
+		if (_progressDialogue != null) {
+			if (_progressDialogue.isShowing()) {
+				_progressDialogue.dismiss();
+			}
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.qburst.billexpress.interfaces.BEExceptionApiListener#
+	 * onNetWorkUnavailableResponse(java.util.Map) To show Network unavailable
+	 * message.
+	 */
+	@Override
+	public void onNetWorkUnavailableResponse(Map<String, Object> errorResponse) {
+
+		//BEUtility.showDialogOkWithGoBack("Error!", "Network not available",
+			//	this);
+		Log.i("Activity", "no network");
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.qburst.billexpress.interfaces.BEExceptionApiListener#
+	 * onRequestTimedoutResponse(java.util.Map) To show Request Timed Out
+	 * message.
+	 */
+	@Override
+	public void onRequestTimedoutResponse(Map<String, Object> errorResponse) {
+
+		BEUtility.showDialogOkWithGoBack(BEConstants.ERROR, BEConstants.REQUEST_TIMED_OUT, this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.qburst.billexpress.interfaces.BEExceptionApiListener#
+	 * onInternalServerErrorResponse(java.util.Map) To show Internal Server
+	 * Error message.
+	 */
+	@Override
+	public void onInternalServerErrorResponse(Map<String, Object> errorResponse) {
+
+		BEUtility.showDialogOkWithGoBack(BEConstants.ERROR, BEConstants.INTERNAL_SERVER_ERROR,
+				this);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.qburst.billexpress.interfaces.BEExceptionApiListener#
+	 * onAuthenticationErrorResponse(java.util.Map) To show Authentication Error
+	 * message.
+	 */
+	@Override
+	public void onAuthenticationErrorResponse(Map<String, Object> errorResponse) {
+
+		BEUtility
+				.showDialogOkWithGoBack(BEConstants.ERROR, BEConstants.AUTHENTICATION_ERROR, this);
+	}
+
+	/**
+	 * designed custom menu handler . subclass should override this method to
+	 * customize menu UI.
+	 * 
+	 * @return
+	 */
+	public int getMenuId() {
+		// Subclass should Override this method to provide menu id
+		return 0;
+	}
+
+	public void groupOnBackPressed() {
+
+	}
+
+	public void showLogoutDialogue() {
+
+		BEDataCache.getSharedCache().clearCache();
+
+	}
+
+
+}

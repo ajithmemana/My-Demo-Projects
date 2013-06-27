@@ -1,0 +1,40 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing data with biller level connection details.
+ * 
+ */
+public class BEBillerTypeConnection {
+	private boolean _enableStatus;
+	private long _billerId;
+	private int _billTypeId;
+	private int _typeToEnable;
+	
+	public boolean isEnableStatus() {
+		return _enableStatus;
+	}
+	public void setEnableStatus(boolean enableStatus) {
+		this._enableStatus = enableStatus;
+	}
+	
+	public int getBillTypeId() {
+		return _billTypeId;
+	}
+	public void setBillTypeId(int billTypeId) {
+		this._billTypeId = billTypeId;
+	}
+	public int isTypeToEnable() {
+		return _typeToEnable;
+	}
+	public void setTypeToEnable(int i) {
+		this._typeToEnable = i;
+	}
+	public Long getBillerId() {
+		return _billerId;
+	}
+	public void setBillerId(Long _billerId) {
+		this._billerId = _billerId;
+	}
+	
+	
+}

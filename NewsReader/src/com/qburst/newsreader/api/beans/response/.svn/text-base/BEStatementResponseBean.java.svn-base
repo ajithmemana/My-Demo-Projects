@@ -1,0 +1,21 @@
+package com.qburst.billexpress.api.beans.response;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BEStatement;
+
+public class BEStatementResponseBean extends BEBaseResponseBean {
+
+	private ArrayList<BEStatement> correspondenceDTOs;
+
+	public ArrayList<BEStatement> getCorrespondenceDTOs() {
+		return correspondenceDTOs;
+	}
+
+	public void setCorrespondenceDTOs(ArrayList<BEStatement> correspondenceDTOs) {
+		this.correspondenceDTOs = correspondenceDTOs;
+	}
+
+
+
+}

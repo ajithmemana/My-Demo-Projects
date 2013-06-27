@@ -1,0 +1,125 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing data with my profile.
+ * 
+ */
+public class BEMyProfile {
+	private String name;
+	private String gender;
+	private String DOB;
+	private String maritalStatus;
+	private String residentialStatus;
+	private String userName;
+	private String emailAddress;
+	private String mobileNumber;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+
+	public String getResidentialStatus() {
+		return residentialStatus;
+	}
+
+	public void setResidentialStatus(String residentialStatus) {
+		this.residentialStatus = residentialStatus;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getDOB() {
+		return DOB;
+	}
+
+	public void setDOB(String dOB) {
+		DOB = dOB;
+	}
+
+	public void copy(BEMyProfile profile) {
+		setName(profile.getName());
+		setDOB(profile.getDOB());
+		setEmailAddress(profile.getEmailAddress());
+		setGender(profile.getGender());
+		setMaritalStatus(profile.getMaritalStatus());
+		setMobileNumber(profile.getMobileNumber());
+		setResidentialStatus(profile.getResidentialStatus());
+		setUserName(profile.getUserName());
+
+	}
+
+	/**
+	 * @param copyprofile - object of BEMyProfile
+	 * @return object of BEComparisonModel.
+	 */
+	public BEComparisonModel compare(BEMyProfile copyprofile) {
+		BEComparisonModel compareModel = new BEComparisonModel();
+		boolean result = true;
+		if (!getName().equals(copyprofile.getName())) {
+			result = false;
+		}
+		if (!getDOB().equals(copyprofile.getDOB())) {
+			result = false;
+		}
+		if (!getEmailAddress().equals(copyprofile.getEmailAddress())) {
+			result = false;
+		}
+		if (!getGender().equals(copyprofile.getGender())) {
+			result = false;
+		}
+		if (!getMaritalStatus().equals(copyprofile.getMaritalStatus())) {
+			result = false;
+		}
+		if (!getMobileNumber().equals(copyprofile.getMobileNumber())) {
+			result = false;
+		}
+		if (!getResidentialStatus().equals(copyprofile.getResidentialStatus())) {
+			result = false;
+		}
+		compareModel.setFlag(result);
+		compareModel.setObject((String)"Not Applicable");
+		return compareModel;
+	}
+}

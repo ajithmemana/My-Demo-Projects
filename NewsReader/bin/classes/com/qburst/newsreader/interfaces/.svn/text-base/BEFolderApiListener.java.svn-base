@@ -1,0 +1,15 @@
+package com.qburst.billexpress.interfaces;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BEFolder;
+
+/**
+ * @author user
+ * Designs FolderAPI Interface methods receivedFolders and errorOccurredInFolderFetch.
+ */
+public interface BEFolderApiListener extends BEBaseAPIListener {
+	
+	public void receivedFolders(ArrayList<BEFolder> folders);
+	public void errorOccurredInFolderFetch();
+}

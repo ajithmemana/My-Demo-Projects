@@ -1,0 +1,6 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BEConnectionDetailsRequestBean extends BESessionRequestBean {
+
+	
+}

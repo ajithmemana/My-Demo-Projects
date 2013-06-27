@@ -1,0 +1,201 @@
+package com.qburst.billexpress.models;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * @author user Model DAO for managing rules connection data.
+ */
+public class BERulesConnections {
+
+	private String connectionId;
+	private String status;
+	private String billerCode;
+	private String  billListId;
+	private String billSubject;
+	private Boolean hasSubscribed;
+	private Long retentionPeriod;
+	private String discontinueHardCopy;
+	private String uniqueBillIdentifier;
+	private String billerResponseStatus;
+	private Long ruleId;
+	private String ruleName;
+	private String connectionDate;
+	private String effectiveDate;
+	
+	public BERulesConnections(BERulesConnections connection) {
+		this.connectionId = connection.connectionId;
+		this.status = connection.status;
+		this.billerCode = connection.billerCode;
+		this.billListId = connection.billListId;
+		this.billSubject = connection.billSubject;
+		this.hasSubscribed = connection.hasSubscribed;
+		this.retentionPeriod = connection.retentionPeriod;
+		this.discontinueHardCopy = connection.discontinueHardCopy;
+		this.uniqueBillIdentifier = connection.uniqueBillIdentifier;
+		this.ruleId = connection.ruleId;
+		this.ruleName = connection.ruleName;
+		this.connectionDate = connection.connectionDate;
+		this.effectiveDate = connection.effectiveDate;
+	}
+	public String getConnectionId() {
+		return connectionId;
+	}
+	public void setConnectionId(String connectionId) {
+		this.connectionId = connectionId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getBillerCode() {
+		return billerCode;
+	}
+	public void setBillerCode(String billerCode) {
+		this.billerCode = billerCode;
+	}
+	public String getBillListId() {
+		return billListId;
+	}
+	public void setBillListId(String billListId) {
+		this.billListId = billListId;
+	}
+	public String getBillSubject() {
+		return billSubject;
+	}
+	public void setBillSubject(String billSubject) {
+		this.billSubject = billSubject;
+	}
+	public Boolean getHasSubscribed() {
+		return hasSubscribed;
+	}
+	public void setHasSubscribed(Boolean hasSubscribed) {
+		this.hasSubscribed = hasSubscribed;
+	}
+	public Long getRetentionPeriod() {
+		return retentionPeriod;
+	}
+	public void setRetentionPeriod(Long retentionPeriod) {
+		this.retentionPeriod = retentionPeriod;
+	}
+	public String getDiscontinueHardCopy() {
+		return discontinueHardCopy;
+	}
+	public void setDiscontinueHardCopy(String discontinueHardCopy) {
+		this.discontinueHardCopy = discontinueHardCopy;
+	}
+	public String getUniqueBillIdentifier() {
+		return uniqueBillIdentifier;
+	}
+	public void setUniqueBillIdentifier(String uniqueBillIdentifier) {
+		this.uniqueBillIdentifier = uniqueBillIdentifier;
+	}
+	public String getBillerResponseStatus() {
+		return billerResponseStatus;
+	}
+	public void setBillerResponseStatus(String billerResponseStatus) {
+		this.billerResponseStatus = billerResponseStatus;
+	}
+	public Long getRuleId() {
+		return ruleId;
+	}
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
+	public String getRuleName() {
+		return ruleName;
+	}
+	public void setRuleName(String ruleName) {
+		this.ruleName = ruleName;
+	}
+	public String getConnectionDate() {
+		return connectionDate;
+	}
+	public void setConnectionDate(String connectionDate) {
+		this.connectionDate = connectionDate;
+	}
+	public String getEffectiveDate() {
+		return effectiveDate;
+	}
+	public void setEffectiveDate(String effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+	public void updateFlagStatus(Boolean status) {
+		setHasSubscribed(status);
+		
+	}
+	
+	
+	/**
+	 * @param connection - object of BERulesConnections.
+	 * 
+	 * @return object of comparison model.
+	 */
+	public BEComparisonModel compare(BERulesConnections connection) {
+		
+		BEComparisonModel model = new BEComparisonModel();
+		
+		BERulesConnections diffConnection = new BERulesConnections(this);
+		
+		boolean flag = true;
+
+		
+		if(BEUtility.compare(getStatus(), connection.getStatus()))
+			diffConnection.setStatus(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(getBillSubject(), connection.getBillSubject()))
+			diffConnection.setBillSubject(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare( getHasSubscribed(), connection.getHasSubscribed()))
+			diffConnection.setHasSubscribed(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(getRetentionPeriod(), connection.getRetentionPeriod()))
+			diffConnection.setRetentionPeriod(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(getDiscontinueHardCopy(), connection.getDiscontinueHardCopy()))
+			diffConnection.setDiscontinueHardCopy(null);
+		else 
+			flag = false;
+
+		
+		if(BEUtility.compare(getBillerResponseStatus(), connection.getBillerResponseStatus()))
+			diffConnection.setBillerResponseStatus(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(getRuleId(), connection.getRuleId()))
+			diffConnection.setRuleId(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(getRuleName(), connection.getRuleName()))
+			diffConnection.setRuleName(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(getConnectionDate(), connection.getConnectionDate()))
+			diffConnection.setConnectionDate(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(getEffectiveDate(), connection.getEffectiveDate()))
+			diffConnection.setEffectiveDate(null);
+		else 
+			flag = false;
+		
+		model.setFlag(flag);
+		model.setObject(diffConnection);
+		
+		return model;
+	}
+	
+}

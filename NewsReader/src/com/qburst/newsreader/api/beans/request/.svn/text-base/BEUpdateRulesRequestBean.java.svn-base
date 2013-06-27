@@ -1,0 +1,17 @@
+package com.qburst.billexpress.api.beans.request;
+
+import com.qburst.billexpress.models.BEGetRuleConnections;
+
+public class BEUpdateRulesRequestBean extends BESessionRequestBean{
+	
+	private BEGetRuleConnections updateObject;
+
+	public BEGetRuleConnections getUpdateObject() {
+		return updateObject;
+	}
+
+	public void setUpdateObject(BEGetRuleConnections updateObject) {
+		this.updateObject = updateObject;
+	}
+
+}

@@ -1,0 +1,15 @@
+package com.qburst.billexpress.interfaces;
+
+import com.qburst.billexpress.models.BEMyProfile;
+/**
+ * @author user Designed BEGetProfileDetailsAPI interface methods
+ *         profileDataReceived and errorInProfileApi.
+ */
+public interface BEGetProfileDetailsAPIListener extends BEBaseAPIListener{
+	
+	public void profileDataReceived(BEMyProfile myProfile);
+
+	public void errorInProfileApi();
+
+
+}

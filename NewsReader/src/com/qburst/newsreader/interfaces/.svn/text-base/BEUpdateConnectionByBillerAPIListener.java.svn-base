@@ -1,0 +1,6 @@
+package com.qburst.billexpress.interfaces;
+
+public interface BEUpdateConnectionByBillerAPIListener {
+
+	
+}

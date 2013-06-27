@@ -1,0 +1,15 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BEGetRuleConnectionsRequestBean extends BESessionRequestBean{
+	
+	private Long ruleId;
+
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
+
+}

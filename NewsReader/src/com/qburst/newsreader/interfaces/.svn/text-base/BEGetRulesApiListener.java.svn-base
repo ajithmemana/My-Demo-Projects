@@ -1,0 +1,17 @@
+package com.qburst.billexpress.interfaces;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BEGetRules;
+
+/**
+ * @author user Designed BEGetRulesApi interface methods
+ *         receivedGetRulesResponse and errorInGettingRules.
+ */
+public interface BEGetRulesApiListener extends BEBaseAPIListener{
+	
+	public void receivedGetRulesResponse(ArrayList<BEGetRules> rulesDTOs );
+
+	public void errorInGettingRules();
+
+}

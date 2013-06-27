@@ -1,0 +1,20 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BEAlertDetailsRequestBean extends BEBaseRequestBean {
+	private String sessionId;
+	private int alertType;
+	
+	public String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	public int getAlertType() {
+		return alertType;
+	}
+	public void setAlertType(int alertType) {
+		this.alertType = alertType;
+	}
+	
+}

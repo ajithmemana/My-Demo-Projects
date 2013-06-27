@@ -1,0 +1,90 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import com.qburst.billexpress.api.beans.request.BEUpdateAlertRequestBean;
+import com.qburst.billexpress.api.beans.response.BEBaseResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEUpdateAlertApiListener;
+import com.qburst.billexpress.models.BEAlertListDTO;
+/**
+*
+* API client end to update alerts.
+*  @author user
+*/
+public class BEUpdateAlertApi extends BEBaseApi implements BEApiListener{
+	
+	private BEUpdateAlertApiListener _listener;
+	
+	
+	public BEUpdateAlertApi(BEUpdateAlertApiListener listener,BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+	public void updateAllAlerts(String sessionId, BEAlertListDTO summary){
+		
+		BEUpdateAlertRequestBean requestBean = new BEUpdateAlertRequestBean();
+		requestBean.setAlertListDTO(summary);
+	
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEBaseResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+		
+		
+	}	
+	
+	@Override
+	public String baseUrl() {
+		return super.baseUrl()+BEApiConstants.updateAlertUrl;
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEBaseResponseBean respBean = (BEBaseResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {	
+				
+				if(respBean.getResultString().equalsIgnoreCase("Success")){
+					if(_listener!=null){
+						_listener.alertUpdatedSuccessfully();
+					}
+				} else {
+					if(_listener!=null){
+						_listener.failedToUpdateAlerts();
+					}
+				}
+				
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				if(_listener!=null){
+					_listener.failedToUpdateAlerts();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+	
+
+}

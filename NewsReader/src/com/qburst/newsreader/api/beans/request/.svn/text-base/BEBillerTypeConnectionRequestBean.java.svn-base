@@ -1,0 +1,42 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BEBillerTypeConnectionRequestBean extends BEBaseRequestBean {
+	
+	private String sessionId;
+	private boolean enableStatus;
+	private long billerId;
+	private int billTypeId;
+	private int typeToEnable;
+	
+	public String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	public boolean isEnableStatus() {
+		return enableStatus;
+	}
+	public void setEnableStatus(boolean enableStatus) {
+		this.enableStatus = enableStatus;
+	}
+	public int getBillTypeId() {
+		return billTypeId;
+	}
+	public void setBillTypeId(int billTypeId) {
+		this.billTypeId = billTypeId;
+	}
+	public int isTypeToEnable() {
+		return typeToEnable;
+	}
+	public void setTypeToEnable(int i) {
+		this.typeToEnable = i;
+	}
+	public long getBillerId() {
+		return billerId;
+	}
+	public void setBillerId(long billerId) {
+		this.billerId = billerId;
+	}
+	
+}

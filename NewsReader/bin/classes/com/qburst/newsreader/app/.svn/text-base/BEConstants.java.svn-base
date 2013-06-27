@@ -1,0 +1,114 @@
+package com.qburst.billexpress.app;
+
+
+public class BEConstants {
+
+	public static final String APP_NAME = "Bill Express";
+
+	// Statemnt
+	public static final String SELECT_ATLEAST_ONE = "Select atleast one statement.";
+	public static final String INVALID_EMAIL_DESCRIPTION = "Please enter a valid email Id.";
+	public static final String MOVE_TO_FOLDER_SUCCESS_MSG = "Bill moved successfully.";
+	public static final String MOVE_TO_FOLDER_ERROR_MSG = "Error in moving bill.";
+	public static final String FORWARD_BILL_SUCCESS_MSG = "Email id forwarded successfully.";
+	public static final String FORWARD_BILL_ERROR_MSG = "Error in forwarding email id.";
+	public static final String BILL_DOWNLOADED_SUCCESS_MSG = "Bill downloaded successfully.";
+	public static final String BILL_STARRED_SUCCESS_MSG = "Bill Starred successfully.";
+	public static final String BILL_UNSTARRED_SUCCESS_MSG = "Bill Unstarred successfully.";
+	public static final String SD_CARD_NOT_FOUND = "Sd card not found.";
+	public static final String SD_CARD_NOT_AVAILABLE = "Sd card is not available.";
+	public static final String PDF_SUPPORT_ERROR = "No application available to view pdf.";
+	public static final String UNABLE_TO_OPEN_PDF = "Unable to open pdf";
+	public static final String ENTER_EMAIL_DESCRIPTION = "Enter Email Id.";
+	public static final String ERROR_STATEMENTLIST_FETCH = "Error in statement list fetch.";
+	public static final String INVALID_PDF = "Invalid pdf file.";
+	public static final String FILE_NEED_PSWD = "This file needs a password.";
+	public static final String FILE_PATH = "/mnt/sdcard/temp.pdf";
+	public static final String FILE_PATH_PDF = "/mnt/sdcard/newPdf.pdf";
+	public static final int AMOUNT_OF_DATA = 10;
+	
+	// folder
+	public static final String INVALID_FOLDER_NAME = "Please enter a valid folder name.";
+	public static final String NEW_FOLDER_NAME = "Enter New Folder Name";
+	public static final String SELECT_FOLDER = "Folder list";
+	public static final String DELETEFOLDER_SUCCESS_MSG = "Folder deleted successfully.";
+	public static final String DELETEFOLDER_ERROR_MSG = "Error in deleting the folder";
+	public static final String DELETE_WARNING_ALERT = "Do you want to delete selected folder?";
+	public static final String RENAME_SUCCESSFULL = "Folder renamed successfully.";
+	public static final String RENAME_UNSUCCESSFULL = "Folder could not be renamed";
+	public static final String ADD_FOLDER_SUCCESS = "New folder added successfully";
+	public static final String RENAME_FOLDER_WARNING = "Please select a folder.";
+	public static final String SELECT_A_FOLDER = "Please select a folder.";
+
+	// Rule
+
+	public static final String DELETE_RULE_SUCCESS_MSG = "Rule deleted successfully.";
+	public static final String RULE_UPDATE_SUCCESS = "Rule updated successfully.";
+	public static final String RULE_ADD_SUCCESS = "Rule added successfully.";
+	public static final String ERROR_RULE_UPDATE = "Error in rule updation.";
+	public static final String ERROR_RULE_ADD = "Error in rule addition.";
+	public static final String ENTER_NEW_RULE_NAME = "Enter new rule name.";
+	public static final String ENTER_NEW_FOLDER_NAME = "Please select a folder.";
+	public static final String ENTER_NEW_RULE_AND_FOLDER = "Enter new rule name and folder name.";
+	public static final String VALID_RULE_NAME_MESSAGE = "Please enter a valid rule name.";
+	public static final String RULE_DELETION_ERROR = "Error in rule deletion.";
+	public static final String ADD_NEW_RULE = "Add New Rule";
+	public static final String SELECT_ONE_RULE = "Please select atleast one rule.";
+	public static final String RULE_DELETE_CONFIRM = "Do you want to delete selected rule?";
+
+	// Connections
+	public static final String FUTURE_CONNECTION_ERROR = "We have failed to update future connections";
+	public static final String RULE_ALL_FLAG_ON = "This will turn on move statements to folder with all Future Biller bills. Do you want to proceed?";
+	public static final String RULE_ALL_FLAG_OFF = "This will turn off move statements to folder with all Future Biller bills. Do you want to proceed?";
+	public static final String FUTURE_CONNECTIONS_ON = "This will turn on connection\n with all future Biller Bills.\n Do you want to proceed?";
+	public static final String FUTURE_CONNECTIONS_OFF = "This will turn off connection\n with all Future Biller Bills.\n Do you want to proceed?";
+	public static final String CONNECTION_UPDATE_SUCCESS = "Changes saved successfully";
+	public static final String CONNECTION_NO_CHANGES = "No changes to be saved";
+
+	// Alerts
+	public static final String FUTURE_ALERTS_ON = "This will turn on alerts for all ";
+	public static final String FUTURE_ALERTS_OFF = "This will turn off alerts for all ";
+	public static final String DO_YOU_WANT_PROCEED = "Do you want to proceed? ";
+
+	// Profile
+	public static final String ENTER_NEW_NAME = "Enter new name.";
+	public static final String ENTER_NEW_EMAIL = "Enter Email Id.";
+	public static final String PROFILE_UPDATION_SUCCESS = "Profile  updated  successfully.";
+	public static final String ENTER_VALID_TEXT = "Please enter a valid text.";
+	public static final String INVALID_MOBILE_NUMBER = "Please enter a valid number.";
+
+	// Network
+	public static final String NETWORK_NOT_AVAILABLE = "No Network Available";
+	public static final String REQUEST_TIMED_OUT = "Request timed out";
+	public static final String INTERNAL_SERVER_ERROR = "Internal server error";
+	public static final String AUTHENTICATION_ERROR = "Authentication error";
+
+	// Common
+	public static final String NO_CHANGES_DONE = "No changes to be saved";
+	public static final String VALID_DATE_ERROR_MSG = "Please  enter  valid date.";
+	public static final String PROFILE_UPDATION_ERROR_MSG = "Error occurred.";
+	public static final String SAVE_CHANGES = "There are unsaved changes. Do you want to save them?";
+	public static final String WARNING = "Warning";
+	public static final String ERROR = "Error";
+	public static final String TERMS_AND_CONDITIONS_HEADING = "Terms and conditions";
+	public static final String DO_YOU_WANT_NAVIGATE_AWAY = "Do you want to navigate away from this page?";
+	public static final String LOG_OUT = "Do you want to log out?";
+	public static final String TYPE_USAGE = "USAGE";
+	public static final String TYPE_FWD = "FWD";
+	public static final String TYPE_USEREG = "USEREG";
+	// Selected positions in menu fragment
+	public static final int CONNECTIONS_SELECTED_POSITION = 16;
+	public static final int PROFILE_SELECTED_POSITION = 17;
+	public static final int ALERTS_SELECTED_POSITION = 18;
+	public static final int FOLDERS_SELECTED_POSITION = 19;
+	public static final int RULES_SELECTED_POSITION = 20;
+
+	// Rules
+	public static final int CALLING_CLASS_STATEMENTS = 1;
+	public static final int CALLING_CLASS_RULES = 2;
+	public static final int CALLING_CLASS_FOLDERS = 2;
+
+	public static int SCREEN_HIGHT = 0;
+	public static int SCREEN_WIDTH = 0;
+
+}

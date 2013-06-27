@@ -1,0 +1,67 @@
+package com.qburst.billexpress.models;
+
+
+public class BEMyProfileData {
+
+	String name;
+	String gender;
+	String maritalStatus;
+	String residentialStatus;
+	String DOB;
+	String emailAddress;
+	String userName;
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	String mobileNumber;
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+	public String getResidentialStatus() {
+		return residentialStatus;
+	}
+	public void setResidentialStatus(String residentialStatus) {
+		this.residentialStatus = residentialStatus;
+	}
+	public String getDOB() {
+		return DOB;
+	}
+	public void setDOB(String dOB) {
+		DOB = dOB;
+	}
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+	
+	
+	
+}

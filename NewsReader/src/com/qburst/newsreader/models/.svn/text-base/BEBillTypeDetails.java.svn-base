@@ -1,0 +1,46 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing data with biller type details.
+ * 
+ */
+public class BEBillTypeDetails {
+
+	private long billTypeId;
+	private String billTypeName;
+	private String billTypeTandCUrl;
+	private boolean billTypeEnableStatus;
+
+	public long getBillTypeId() {
+		return billTypeId;
+	}
+
+	public void setBillTypeId(long billTypeId) {
+		this.billTypeId = billTypeId;
+	}
+
+	public String getBillTypeName() {
+		return billTypeName;
+	}
+
+	public void setBillTypeName(String billTypeName) {
+		this.billTypeName = billTypeName;
+	}
+
+	public String getBillTypeTandCUrl() {
+		return billTypeTandCUrl;
+	}
+
+	public void setBillTypeTandCUrl(String billTypeTandCUrl) {
+		this.billTypeTandCUrl = billTypeTandCUrl;
+	}
+
+	public boolean isBillTypeEnableStatus() {
+		return billTypeEnableStatus;
+	}
+
+	public void setBillTypeEnableStatus(boolean billTypeEnableStatus) {
+		this.billTypeEnableStatus = billTypeEnableStatus;
+	}
+
+}

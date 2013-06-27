@@ -1,0 +1,30 @@
+package com.qburst.billexpress.api.beans.response;
+
+
+public class BEAddFolderResponseBean extends BEBaseResponseBean{
+	
+	private int statusCode;
+	private String statusString;
+	private String folderId;
+	
+	public int getStatusCode() {
+		return statusCode;
+	}
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
+	public String getStatusString() {
+		return statusString;
+	}
+	public void setStatusString(String statusString) {
+		this.statusString = statusString;
+	}
+	public String getFolderId() {
+		return folderId;
+	}
+	public void setFolderId(String folderId) {
+		this.folderId = folderId;
+	}
+	
+
+}

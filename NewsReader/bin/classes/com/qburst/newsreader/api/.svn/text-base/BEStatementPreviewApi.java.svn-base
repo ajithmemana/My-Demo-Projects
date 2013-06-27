@@ -1,0 +1,87 @@
+package com.qburst.billexpress.api;
+
+import java.io.InputStream;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEStatementPreviewRequestBean;
+import com.qburst.billexpress.api.beans.response.BEStatementPreviewResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEStatementPreviewAPIListener;
+/**
+*
+* API client end to retrieve StatementPreview information.
+*  @author user
+*/
+public class BEStatementPreviewApi extends BEBaseApi implements BEApiListener {
+
+	BEStatementPreviewAPIListener _listener;
+	public BEStatementPreviewApi (BEStatementPreviewAPIListener listener , BEExceptionApiListener exceptionListener)
+	{
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+	public void getStatementPreview(long statementId) {
+
+		BEStatementPreviewRequestBean requestBean = new BEStatementPreviewRequestBean();
+		requestBean.setStatementId(101);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEStatementPreviewResponseBean.class,baseUrl());
+		service.responseType = "STREAM";
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+	@Override
+	public String baseUrl(){
+		return super.baseUrl()+ BEApiConstants.downloadPdfUrl;
+	}
+	
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE urtytfor BEStatementPreview", response.toString());
+		
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+		
+			BEStatementPreviewResponseBean respBean = (BEStatementPreviewResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (response != null) {				
+				
+	
+				
+				InputStream statementStream =  respBean.getIs();
+				
+				if(_listener!=null){
+					_listener.receivedStatementPreview(statementStream, null);
+				}
+				
+			}
+		}else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+
+}

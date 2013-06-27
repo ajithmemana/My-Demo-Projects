@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+
+/**
+ * @author user Designed BEUpdateRuleAPI interface methods
+ *         ruleUpdatedSuccessfully and errorInUpdate.
+ */
+public interface BEUpdateRuleAPIListener extends BEBaseAPIListener{
+
+	public void ruleUpdatedSuccessfully();
+	public void errorInUpdate();
+	
+}

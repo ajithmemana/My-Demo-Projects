@@ -1,0 +1,84 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BERuleDeleteRequestBean;
+import com.qburst.billexpress.api.beans.response.BERuleDeleteResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BERuleDeleteApiListener;
+/**
+*
+* API client end to delete rule.
+*  @author user
+*/
+public class BERuleDeleteApi extends BEBaseApi implements BEApiListener {
+
+	
+	BERuleDeleteApiListener _listener;
+	
+	public BERuleDeleteApi(BERuleDeleteApiListener listener,BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+	public void deleteRule(String sessionId, Long ruleId){
+		BERuleDeleteRequestBean requestBean = new BERuleDeleteRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setRuleId(ruleId);
+		
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BERuleDeleteResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+	
+	@Override
+	public String baseUrl(){
+		return super.baseUrl()+BEApiConstants.deleteRule;
+	}
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+
+		Log.i("RESPONSE", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BERuleDeleteResponseBean respBean = (BERuleDeleteResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {				
+				
+
+				if(_listener!=null){
+					_listener.ruleDeleted();
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+	
+	
+
+}

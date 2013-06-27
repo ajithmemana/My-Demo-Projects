@@ -1,0 +1,26 @@
+package com.qburst.billexpress.models;
+
+/**
+ * @author user Model DAO for managing sub folder data.
+ */
+public class BESubFolder {
+
+	private String subFolderId;
+	private String folderName;
+
+	public String getSubFolderId() {
+		return subFolderId;
+	}
+
+	public void setSubFolderId(String subFolderId) {
+		this.subFolderId = subFolderId;
+	}
+
+	public String getFolderName() {
+		return folderName;
+	}
+
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
+	}
+}

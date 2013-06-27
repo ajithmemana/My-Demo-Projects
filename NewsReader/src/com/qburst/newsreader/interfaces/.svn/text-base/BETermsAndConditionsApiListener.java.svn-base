@@ -1,0 +1,8 @@
+package com.qburst.billexpress.interfaces;
+
+public interface BETermsAndConditionsApiListener extends BEBaseAPIListener{
+
+	public void receivedTandC(String tAndC);
+	public void errorInReceivingtAndC();
+	
+}

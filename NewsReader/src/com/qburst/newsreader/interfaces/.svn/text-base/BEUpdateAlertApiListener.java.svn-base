@@ -1,0 +1,10 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BEUpdateAlertApi interface methods
+ *         alertUpdatedSuccessfully and failedToUpdateAlerts.
+ */
+public interface BEUpdateAlertApiListener extends BEBaseAPIListener {
+	public void alertUpdatedSuccessfully();
+	public void failedToUpdateAlerts();
+}

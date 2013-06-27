@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BEMoveToFolderAPI interface methods
+ *         receivedMoveToFolderResponse and errorInMoveToFolder.
+ */
+public interface BEMoveToFolderAPIListener extends BEBaseAPIListener {
+
+	public void receivedMoveToFolderResponse();
+
+	public void errorInMoveToFolder();
+
+}

@@ -1,0 +1,82 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEUpdateReadStatusRequestBean;
+import com.qburst.billexpress.api.beans.response.BEUpdateReadStatusResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEUpdateReadStatusApiListener;
+
+public class BEUpdateReadStatusApi extends BEBaseApi implements BEApiListener {
+
+	BEUpdateReadStatusApiListener _listener;
+	public BEUpdateReadStatusApi(BEUpdateReadStatusApiListener listener, BEExceptionApiListener exceptionListener) {
+		
+		this._listener = listener;
+		this._excptnListener = exceptionListener;
+	}
+	
+	public void updateReadStatus (String sessionId,Boolean beforeLogin, Long msgId, String readStatus) {
+		
+		BEUpdateReadStatusRequestBean requestBean = new BEUpdateReadStatusRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setBeforeLogin(beforeLogin);
+		requestBean.setMsgId(msgId);
+		requestBean.setStatus(readStatus);
+		
+		BEBaseWebService service = new BEBaseWebService(this,
+				requestBean.toJsonString(),
+				BEUpdateReadStatusResponseBean.class, baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+	
+
+	@Override
+	public String baseUrl() {
+
+		return super.baseUrl() + BEApiConstants.updateReadStatus;
+	}
+
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		
+		Log.i("RESPONSE123123132", response.toString());
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEUpdateReadStatusResponseBean respBean = (BEUpdateReadStatusResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {
+
+				if (_listener != null) {
+					_listener.updatedReadStatus();
+				}
+
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		_listener.errorInUpdatinugreadStatus();
+		detectErrorMessage(errorResponse);
+	}
+	
+	
+}

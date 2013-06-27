@@ -1,0 +1,15 @@
+package com.qburst.billexpress.interfaces;
+
+import com.qburst.billexpress.models.BEGetRuleConnections;
+
+/**
+ * @author user Designed BEGetRuleConnectionsApi interface methods
+ *         receivedRulesConnectionsDetails and errorInRulesConnectionDetails.
+ */
+public interface BEGetRuleConnectionsApiListener extends BEBaseAPIListener{
+
+	public void receivedRulesConnectionsDetails(BEGetRuleConnections rulesDTO); 
+	public void errorInRulesConnectionDetails();
+	
+	
+}

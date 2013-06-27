@@ -1,0 +1,15 @@
+package com.qburst.billexpress.interfaces;
+
+
+/**
+ * @author user Designed BEUpdateFutureConnectionsAPI interface methods
+ *         updatedFutureConnections and errorInUpdatingFutureConnections.
+ */
+
+public interface BEUpdateFutureConnectionsAPIListener extends BEBaseAPIListener {
+
+	public void updatedFutureConnections();
+
+	public void errorInUpdatingFutureConnections();
+
+}

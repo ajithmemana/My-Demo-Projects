@@ -1,0 +1,15 @@
+package com.qburst.billexpress.api.beans.response;
+
+import com.qburst.billexpress.models.BEMenuNavigation;
+
+public class BEMenuResponseBean extends BEBaseResponseBean {
+	private BEMenuNavigation navigations;
+
+	public BEMenuNavigation getNavigations() {
+		return navigations;
+	}
+
+	public void setNavigations(BEMenuNavigation navigations) {
+		this.navigations = navigations;
+	}
+}

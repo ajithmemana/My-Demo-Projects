@@ -1,0 +1,17 @@
+package com.qburst.billexpress.api.beans.response;
+
+import com.qburst.billexpress.models.BEConnectionList;
+
+public class BEConnectionDetailsResponseBean extends BEBaseResponseBean {
+
+	private BEConnectionList connectionList;
+
+	public BEConnectionList getConnectionList() {
+		return connectionList;
+	}
+
+	public void setConnectionList(BEConnectionList connectionList) {
+		this.connectionList = connectionList;
+	}
+
+}

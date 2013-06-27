@@ -1,0 +1,169 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+import android.util.Log;
+
+import com.qburst.billexpress.cache.BEDataCache;
+import com.qburst.billexpress.utilities.BEUtility;
+/**
+ * @author user Model DAO for managing data with Alert list DTO.
+ * 
+ */
+public class BEAlertListDTO {
+	private ArrayList<BEAlerts> alerts;
+	private Boolean allIncomingEnabled;
+	private Boolean allUnreadEnabled;
+	private Boolean allAutoFwdEnabled;
+	private Boolean alertOn;
+
+	public Boolean isAllIncomingEnabled() {
+		return allIncomingEnabled;
+	}
+
+	public void setAllIncomingEnabled(Boolean allIncomingEnabled) {
+		this.allIncomingEnabled = allIncomingEnabled;
+
+	}
+
+	public Boolean isAllUnreadEnabled() {
+		return allUnreadEnabled;
+	}
+
+	public void setAllUnreadEnabled(Boolean allUnreadEnabled) {
+		this.allUnreadEnabled = allUnreadEnabled;
+	}
+
+	public Boolean isAllAutoFwdEnabled() {
+		return allAutoFwdEnabled;
+	}
+
+	public void setAllAutoFwdEnabled(Boolean allAutoFwdEnabled) {
+		this.allAutoFwdEnabled = allAutoFwdEnabled;
+	}
+
+	public Boolean isAlertOn() {
+		return alertOn;
+	}
+
+	public void setAlertOn(Boolean alertOn) {
+		this.alertOn = alertOn;
+	}
+
+	public ArrayList<BEAlerts> getAlerts() {
+		return alerts;
+	}
+
+	public void setAlerts(ArrayList<BEAlerts> alerts) {
+		this.alerts = alerts;
+	}
+
+	/**
+	 * @param connectionStatus
+	 * @param alertType
+	 *  to set future bill switch status.
+	 */
+	public void setFutureBillStatus(boolean connectionStatus, String alertType) {
+		ArrayList<String> alertTypeList = BEDataCache.getSharedCache()
+				.getAlertTypesList();
+		if (alertType.equals(alertTypeList.get(0))) {
+			setAllIncomingEnabled(connectionStatus);
+		} else if (alertType.equals(alertTypeList.get(1))) {
+			setAllUnreadEnabled(connectionStatus);
+		} else if (alertType.equals(alertTypeList.get(2))) {
+			setAllAutoFwdEnabled(connectionStatus);
+		}
+		ArrayList<BEAlerts> alerts = getAlerts();
+		for (BEAlerts alert : alerts) {
+			if (alert.getAlertType().equals(alertType)) {
+
+				alert.setForBillStatus(connectionStatus);
+			}
+		}
+
+	}
+
+	/**
+	 * @param alertListDto
+	 * copies received response to another object.
+	 */
+	public void copy(BEAlertListDTO alertListDto) {
+		setAlertOn(alertListDto.isAlertOn());
+		setAllIncomingEnabled(alertListDto.isAllIncomingEnabled());
+		setAllUnreadEnabled(alertListDto.isAllUnreadEnabled());
+		setAllAutoFwdEnabled(alertListDto.isAllAutoFwdEnabled());
+		setAlerts(null);
+		ArrayList<BEAlerts> copyAlert = new ArrayList<BEAlerts>();
+		int count = alertListDto.getAlerts().size();
+		for (int i = 0; i < count; i++) {
+			BEAlerts copyAlerts = new BEAlerts();
+			copyAlerts.copy(alertListDto.getAlerts().get(i));
+			copyAlert.add(copyAlerts);
+		}
+		setAlerts(copyAlert);
+		Log.i("BEAlerts", alertListDto.isAllUnreadEnabled() ? "unread true"
+				: "unread false");
+		Log.i("BEAlerts",
+				alertListDto.isAllIncomingEnabled() ? "Incomming true"
+						: "unread false");
+	}
+
+	/**
+	 * @param copyAlertList - BEAlertListDTO object
+	 * @return BEComparisonModel object
+	 */
+	public BEComparisonModel compare(BEAlertListDTO copyAlertList) {
+
+		BEComparisonModel compareModel = new BEComparisonModel();
+		
+		BEAlertListDTO diffAlertDTO = new BEAlertListDTO();
+		diffAlertDTO.copy(this);
+		
+		boolean result = true;
+		
+		if(BEUtility.compare(isAlertOn(), copyAlertList.isAlertOn())){
+			diffAlertDTO.setAlertOn(null);
+		} else {
+			result = false;
+		}
+		
+		if(BEUtility.compare(isAllAutoFwdEnabled(), copyAlertList.isAllAutoFwdEnabled())){
+			diffAlertDTO.setAllAutoFwdEnabled(null);
+		} else {
+			result = false;
+		}
+
+		if(BEUtility.compare(isAllIncomingEnabled(), copyAlertList.isAllIncomingEnabled())){
+			diffAlertDTO.setAllIncomingEnabled(null);
+		} else {
+			result = false;
+		}
+
+		if(BEUtility.compare(isAllUnreadEnabled(), copyAlertList.isAllUnreadEnabled())){
+			diffAlertDTO.setAllUnreadEnabled(null);
+		} else {
+			result = false;
+		}		
+
+		int count = copyAlertList.getAlerts().size();
+
+		ArrayList<BEAlerts> resultantAlerts = new ArrayList<BEAlerts>();
+
+		for (int i = 0; i < count; i++) {
+
+			BEAlerts alert = getAlerts().get(i);
+			BEAlerts cAlert = copyAlertList.getAlerts().get(i);
+			BEComparisonModel tModel = alert.compare(cAlert);
+			if (tModel.isFlag() == false) {
+				resultantAlerts.add((BEAlerts) tModel.getObject());
+				result = false;
+			}
+
+		}
+		
+		diffAlertDTO.setAlerts(resultantAlerts);
+		compareModel.setObject(diffAlertDTO);
+		compareModel.setFlag(result);
+		return compareModel;
+	}
+}

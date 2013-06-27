@@ -1,0 +1,100 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BESessionRequestBean;
+import com.qburst.billexpress.api.beans.response.BEAlertSummaryResponseBean;
+import com.qburst.billexpress.interfaces.BEAlertSummaryAPIListener;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.models.BEAlertListDTO;
+/**
+*
+* API client end to retrieve Alert Summary.
+*  @author user
+*/
+public class BEAlertSummaryApi extends BEBaseApi implements BEApiListener {
+
+	private BEAlertSummaryAPIListener _listener;
+	
+	public BEAlertSummaryApi(BEAlertSummaryAPIListener listener,BEExceptionApiListener exceptionListener){
+	
+		this._listener = listener;
+		this._excptnListener = exceptionListener;
+		
+	}
+	
+	
+	public void fetchAlertSummary(String sessionId){
+		BESessionRequestBean requestBean = new BESessionRequestBean();
+		requestBean.setSessionId(sessionId);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEAlertSummaryResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+	
+	@Override
+	public String baseUrl() {
+		return super.baseUrl()+BEApiConstants.alertSummaryUrl;
+		//return "http://10.4.0.61:8888/getAlertSummary.php";
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE>>", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEAlertSummaryResponseBean respBean = (BEAlertSummaryResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {		
+				
+				
+				
+				BEAlertListDTO alertListDTO = new BEAlertListDTO(); 
+					//alertListDTO = respBean.getAlertListDTOItems();
+					alertListDTO.setAlertOn(respBean.getAlertListDTO().isAlertOn());
+					alertListDTO.setAllAutoFwdEnabled(respBean.getAlertListDTO().isAllAutoFwdEnabled());
+					alertListDTO.setAllIncomingEnabled(respBean.getAlertListDTO().isAllIncomingEnabled());
+					alertListDTO.setAllUnreadEnabled(respBean.getAlertListDTO().isAllUnreadEnabled());
+					alertListDTO.setAlerts(respBean.getAlertListDTO().getAlerts());
+				//Deprecated 
+//				BEAlertSummary summary = new BEAlertSummary();
+//				summary.setAlertTypeCustomized(respBean.isAlertTypeCustomized());
+//				summary.setAutoForwardBillStatus(respBean.isAutoForwardBillStatus());
+//				summary.setNewBillStatus(respBean.isNewBillStatus());
+//				summary.setUnreadBillStatus(respBean.isUnreadBillStatus());
+				if(_listener!=null){
+					_listener.receivedAlertSummary(alertListDTO);
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		_listener.failedToFetchAlertSummary();
+		detectErrorMessage(errorResponse);
+		
+	}
+
+}

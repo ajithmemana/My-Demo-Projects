@@ -1,0 +1,7 @@
+package com.qburst.billexpress.api.beans.request;
+
+import com.qburst.billexpress.api.beans.BEBaseBean;
+
+public class BEBaseRequestBean extends BEBaseBean {
+
+}

@@ -1,0 +1,5 @@
+package com.qburst.billexpress.models;
+
+public class BEBillerTypeAlert extends BEBillerTypeConnection {
+
+}

@@ -1,0 +1,12 @@
+package com.qburst.billexpress.interfaces;
+
+import com.qburst.billexpress.models.BEBillerTypeConnection;
+
+/**
+ * @author user Designed BEUpdateBillerConnectionApi interface methods
+ *         successfullyUpdatedBillerConnection and failedToUpdateBillerConnecton.
+ */
+public interface BEUpdateBillerConnectionApiListener extends BEBaseAPIListener {
+	public void successfullyUpdatedBillerConnection(BEBillerTypeConnection connection);
+	public void failedToUpdateBillerConnecton(BEBillerTypeConnection connection);
+}

@@ -1,0 +1,89 @@
+package com.qburst.billexpress.api;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEMoveToFolderRequestBean;
+import com.qburst.billexpress.api.beans.response.BEMoveToFolderResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEMoveToFolderAPIListener;
+/**
+*
+* API client end to retrieve Move to folder Information.
+*  @author user
+*/
+public class BEMoveToFolderApi extends BEBaseApi implements BEApiListener {
+
+	BEMoveToFolderAPIListener _listener;
+
+	public BEMoveToFolderApi(BEMoveToFolderAPIListener listener,
+			BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+
+	public void moveToFolder(String sessionId, String folderId,
+			ArrayList<Long> statementIds, String destFolderId) {
+		BEMoveToFolderRequestBean requestBean = new BEMoveToFolderRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setSrcFolderId(folderId);
+		requestBean.setStatementIds(statementIds);
+		requestBean.setDestFolderId(destFolderId);
+
+		if (_listener != null) {
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this,
+				requestBean.toJsonString(), BEMoveToFolderResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+
+	@Override
+	public String baseUrl() {
+		return super.baseUrl() +BEApiConstants.moveToFolderUrl;
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE", response.toString());
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEMoveToFolderResponseBean respBean = (BEMoveToFolderResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {
+
+				String resultString = respBean.getResultString();
+				int responseCode = respBean.getStatusCode();
+				Log.isLoggable("ResponseCode", responseCode);
+				Log.i("ResponseString", resultString);
+				if (_listener != null) {
+					_listener.receivedMoveToFolderResponse();
+				}
+
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+
+	}
+
+}

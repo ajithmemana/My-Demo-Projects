@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ORMLiteDemo</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_data_base_viewer">DataBaseViewer</string>
+    <string name="title_activity_add_to_data_base">AddToDataBase</string>
+    <string name="title_activity_delete_from_database">DeleteFromDatabase</string>
+    <string name="title_activity_search_database">SearchDatabase</string>
+
+</resources>

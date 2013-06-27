@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+
+/**
+ * @author user Designed BERuleDeleteApi interface methods
+ *         ruleDeleted and errorInDeleted.
+ */
+public interface BERuleDeleteApiListener extends BEBaseAPIListener {
+	
+	public void ruleDeleted();
+	public void errorInDeleted();
+
+}

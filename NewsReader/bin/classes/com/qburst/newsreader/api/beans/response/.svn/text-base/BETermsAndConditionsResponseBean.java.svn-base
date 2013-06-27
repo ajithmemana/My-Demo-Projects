@@ -1,0 +1,15 @@
+package com.qburst.billexpress.api.beans.response;
+
+public class BETermsAndConditionsResponseBean extends BEBaseResponseBean {
+	
+	private String tAndC;
+
+	public String getTandC() {
+		return tAndC;
+	}
+
+	public void setTandC(String tAndC) {
+		this.tAndC = tAndC;
+	}
+	
+}

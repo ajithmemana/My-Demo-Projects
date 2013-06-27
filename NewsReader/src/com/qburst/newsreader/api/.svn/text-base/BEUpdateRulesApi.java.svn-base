@@ -1,0 +1,83 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEUpdateRulesRequestBean;
+import com.qburst.billexpress.api.beans.response.BEUpdateRulesResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEUpdateRuleAPIListener;
+import com.qburst.billexpress.models.BEGetRuleConnections;
+/**
+*
+* API client end to update rules.
+*  @author user
+*/
+public class BEUpdateRulesApi extends BEBaseApi implements BEApiListener{
+
+	
+	BEUpdateRuleAPIListener _listener;
+	
+	public BEUpdateRulesApi(BEUpdateRuleAPIListener listener,BEExceptionApiListener exceptionListener) {
+
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+	public void updateRule(String sessionId, BEGetRuleConnections updateObject) {
+		//BESessionRequestBean requestBean = new BESessionRequestBean();
+		BEUpdateRulesRequestBean requestBean = new BEUpdateRulesRequestBean();
+		requestBean.setUpdateObject(updateObject);
+		requestBean.setSessionId(sessionId);
+				
+		if(_listener!=null) {
+			_listener.requestDidStart();
+		}
+		
+		BEBaseWebService service = new BEBaseWebService(this,requestBean.toJsonString(),BEUpdateRulesResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+		
+	}
+	
+	public String baseUrl() {
+		return super.baseUrl()+BEApiConstants.updateRuleUrl;
+		
+	}
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		
+		Log.i("RESPONSE!@#", response.toString());
+		if(_listener != null) {
+		_listener.requestDidFinish();
+		}
+		if(response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+			BEUpdateRulesResponseBean respBean = (BEUpdateRulesResponseBean) response.get(BEApiConstants.kSuccessMsgKey);
+			
+		
+		 if(respBean != null) {
+			
+			 if(_listener != null) {
+				 _listener.ruleUpdatedSuccessfully();
+			 }
+			 
+		 }
+		} else if(response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+			if(response.containsKey("HttpStatus"));
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		
+		if(_listener != null) {
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+	
+
+}

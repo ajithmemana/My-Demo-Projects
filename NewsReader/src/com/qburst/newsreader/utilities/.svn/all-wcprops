@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/billexpress/!svn/ver/1336/trunk/Android/src/com/qburst/billexpress/utilities
+END
+BEProfileAuthenticationWebViewClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/billexpress/!svn/ver/1110/trunk/Android/src/com/qburst/billexpress/utilities/BEProfileAuthenticationWebViewClient.java
+END
+BELoginWebViewClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/billexpress/!svn/ver/1325/trunk/Android/src/com/qburst/billexpress/utilities/BELoginWebViewClient.java
+END
+BEUtility.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/billexpress/!svn/ver/1336/trunk/Android/src/com/qburst/billexpress/utilities/BEUtility.java
+END
+QuickAction.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/billexpress/!svn/ver/1281/trunk/Android/src/com/qburst/billexpress/utilities/QuickAction.java
+END
+ActionItem.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/billexpress/!svn/ver/1224/trunk/Android/src/com/qburst/billexpress/utilities/ActionItem.java
+END
+BEXMLInflateUtility.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/billexpress/!svn/ver/166/trunk/Android/src/com/qburst/billexpress/utilities/BEXMLInflateUtility.java
+END
+PopupWindows.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/billexpress/!svn/ver/1218/trunk/Android/src/com/qburst/billexpress/utilities/PopupWindows.java
+END

@@ -1,0 +1,7 @@
+package com.qburst.billexpress.api.beans.response;
+
+public class BEUpdateReadStatusResponseBean extends BEBaseResponseBean{
+	
+	
+
+}

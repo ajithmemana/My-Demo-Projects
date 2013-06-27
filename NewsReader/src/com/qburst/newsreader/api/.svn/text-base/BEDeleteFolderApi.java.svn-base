@@ -1,0 +1,90 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEDeleteFolderRequestBean;
+import com.qburst.billexpress.api.beans.response.BEDeleteFolderResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEDeleteFolderAPIListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+/**
+*
+* API client end to retrieve Delete Folder Information.
+*  @author user
+*/
+public class BEDeleteFolderApi extends BEBaseApi implements BEApiListener{
+
+	
+	BEDeleteFolderAPIListener _listener;
+	public BEDeleteFolderApi(BEDeleteFolderAPIListener listener,BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+	public void deleteFolders(String sessionId, String folderId, String text,
+			String subfolderId, String subfolderName){
+	   BEDeleteFolderRequestBean requestBean = new BEDeleteFolderRequestBean();
+	   requestBean.setSessionId(sessionId);
+		requestBean.setFolderId(folderId);
+		requestBean.setFolderName(text);
+		requestBean.setSubFolderId(subfolderId);
+		requestBean.setSubFolderName(subfolderName);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEDeleteFolderResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+	@Override
+	public String baseUrl(){
+		return super.baseUrl()+BEApiConstants.deleteFolderUrl;
+	}
+	
+	
+	
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		
+		Log.i("RESPONSE", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEDeleteFolderResponseBean respBean = (BEDeleteFolderResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {				
+				
+				if(_listener!=null){
+			//		_listener.deletedFolders(respBean.getResponseCode());
+					_listener.deletedFolders(1000);
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+		
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+		
+}
+
+

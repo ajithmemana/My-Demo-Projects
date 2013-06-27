@@ -1,0 +1,112 @@
+package com.qburst.billexpress.api;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEDownloadStatementRequestBean;
+import com.qburst.billexpress.api.beans.request.BESessionRequestBean;
+import com.qburst.billexpress.api.beans.response.BEStatementPreviewResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEDownloadStatementAPIListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * 
+ * API client end to retrieve Download Statements information.
+ * 
+ * @author user
+ */
+public class BEDownloadStatementApi extends BEBaseApi implements BEApiListener {
+
+	BEDownloadStatementAPIListener _listener;
+	private long _msgId;
+
+	public BEDownloadStatementApi(BEDownloadStatementAPIListener listener,
+			BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+
+	public void downloadStatement(String sessionId, long msgId) {
+		BEDownloadStatementRequestBean requestBean = new BEDownloadStatementRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setStatementId(msgId);
+		set_msgId(msgId);
+		if (_listener != null) {
+			_listener.requestDidStart();
+		}
+
+		BEBaseWebService service = new BEBaseWebService(this,
+				requestBean.toJsonString(),
+				BEStatementPreviewResponseBean.class, baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.responseType = "STREAM";
+		service.execute(baseUrl());
+
+	}
+
+	@Override
+	public String baseUrl() {
+		return super.baseUrl() + BEApiConstants.downloadStatementUrl;
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+
+		Log.i("RESPONSE", response.toString());
+
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEStatementPreviewResponseBean respBean = (BEStatementPreviewResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {
+
+				InputStream is = respBean.getIs();
+
+				File statement = BEUtility.getPDFFile(is, get_msgId());
+
+				if (_listener != null) {
+					if (statement != null) {
+						_listener.downloadedStatement(statement);
+					} else {
+						_listener.errorInDownload();
+					}
+				}
+
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+			}
+		}
+
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+
+	public long get_msgId() {
+		return _msgId;
+	}
+
+	public void set_msgId(long _msgId) {
+		this._msgId = _msgId;
+	}
+
+}

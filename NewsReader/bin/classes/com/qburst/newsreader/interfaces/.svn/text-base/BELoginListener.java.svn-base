@@ -1,0 +1,21 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designs methods userLoggedInSuccessfully, networkErrorOccured,
+ *         pageLoadDidStart, pageLoadDidFinish.
+ */
+public interface BELoginListener {
+
+	public void userLoggedInSuccessfully();
+
+	public void networkErrorOccured();
+
+	public void pageLoadDidStart();
+
+	public void pageLoadDidFinish();
+
+	public void loadInBrowser(String url);
+	
+	public void newUserLogin();
+
+}

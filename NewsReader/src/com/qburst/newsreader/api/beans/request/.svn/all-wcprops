@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/billexpress/!svn/ver/1324/trunk/Android/src/com/qburst/billexpress/api/beans/request
+END
+BERuleDeleteRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/billexpress/!svn/ver/748/trunk/Android/src/com/qburst/billexpress/api/beans/request/BERuleDeleteRequestBean.java
+END
+BEBillerTypeConnectionRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/billexpress/!svn/ver/404/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEBillerTypeConnectionRequestBean.java
+END
+BEManageRuleGetRulesRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/billexpress/!svn/ver/695/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEManageRuleGetRulesRequestBean.java
+END
+BEDownloadStatementRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/billexpress/!svn/ver/180/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEDownloadStatementRequestBean.java
+END
+BEUpdateRulesRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/billexpress/!svn/ver/925/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEUpdateRulesRequestBean.java
+END
+BEDeleteFolderRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/billexpress/!svn/ver/1324/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEDeleteFolderRequestBean.java
+END
+BEStatementListRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/billexpress/!svn/ver/434/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEStatementListRequestBean.java
+END
+BEUpdateProfileRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/billexpress/!svn/ver/396/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEUpdateProfileRequestBean.java
+END
+BERenameFolderRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/billexpress/!svn/ver/1324/trunk/Android/src/com/qburst/billexpress/api/beans/request/BERenameFolderRequestBean.java
+END
+BEConnectionDetailsRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/billexpress/!svn/ver/253/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEConnectionDetailsRequestBean.java
+END
+BEMoveToFolderRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/billexpress/!svn/ver/1344/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEMoveToFolderRequestBean.java
+END
+BEStatementPreviewRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/billexpress/!svn/ver/227/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEStatementPreviewRequestBean.java
+END
+BEGetProfileDetailsRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/billexpress/!svn/ver/340/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEGetProfileDetailsRequestBean.java
+END
+BETermsAndConditionsRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/billexpress/!svn/ver/1285/trunk/Android/src/com/qburst/billexpress/api/beans/request/BETermsAndConditionsRequestBean.java
+END
+BEBaseRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/billexpress/!svn/ver/30/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEBaseRequestBean.java
+END
+BEGetRuleConnectionsRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/billexpress/!svn/ver/719/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEGetRuleConnectionsRequestBean.java
+END
+BEUpdateAlertRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/billexpress/!svn/ver/580/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEUpdateAlertRequestBean.java
+END
+BEToggleStarRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/billexpress/!svn/ver/184/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEToggleStarRequestBean.java
+END
+BEAlertDetailsRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/billexpress/!svn/ver/349/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEAlertDetailsRequestBean.java
+END
+BEUpdateFutureConnectionsRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/billexpress/!svn/ver/579/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEUpdateFutureConnectionsRequestBean.java
+END
+BEUpdateReadStatusRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/billexpress/!svn/ver/1231/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEUpdateReadStatusRequestBean.java
+END
+BESessionRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/billexpress/!svn/ver/45/trunk/Android/src/com/qburst/billexpress/api/beans/request/BESessionRequestBean.java
+END
+BEAddFolderRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/billexpress/!svn/ver/1323/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEAddFolderRequestBean.java
+END
+BEForwardStatementListRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/billexpress/!svn/ver/180/trunk/Android/src/com/qburst/billexpress/api/beans/request/BEForwardStatementListRequestBean.java
+END
+BENotificationRequestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/billexpress/!svn/ver/1219/trunk/Android/src/com/qburst/billexpress/api/beans/request/BENotificationRequestBean.java
+END

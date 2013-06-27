@@ -1,0 +1,198 @@
+package com.qburst.billexpress.models;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * @author user Model DAO for managing data with connection DTOs.
+ * 
+ */
+public class BEConnectionDTOs {
+
+	private String connectionId;
+	String connectionDate;
+	String billerCode;
+	String billListId;
+	String billName;
+	Boolean hasConnected;
+	String effectiveDate;
+	Long retentionPeriod;
+	String discontinueHardCopy;
+	String uniqueBillIdentifier;
+	String billerResponseStatus;
+	Boolean isFutureType;
+
+	public Boolean isFutureType() {
+		return isFutureType;
+	}
+
+	public void setFutureType(Boolean isFutureType) {
+		this.isFutureType = isFutureType;
+	}
+
+	public String getConnectionId() {
+		return connectionId;
+	}
+
+	public void setConnectionId(String connectionId) {
+		this.connectionId = connectionId;
+	}
+
+	public String getConnectionDate() {
+		return connectionDate;
+	}
+
+	public void setConnectionDate(String connectionDate) {
+		this.connectionDate = connectionDate;
+	}
+
+	public String getBillerCode() {
+		return billerCode;
+	}
+
+	public void setBillerCode(String billerCode) {
+		this.billerCode = billerCode;
+	}
+
+	public String getBillListId() {
+		return billListId;
+	}
+
+	public void setBillListId(String billListId) {
+		this.billListId = billListId;
+	}
+
+	public String getBillName() {
+		return billName;
+	}
+
+	public void setBillName(String billName) {
+		this.billName = billName;
+	}
+
+	public boolean isHasConnected() {
+		return hasConnected;
+	}
+
+	public void setHasConnected(Boolean hasConnected) {
+		this.hasConnected = hasConnected;
+		if(hasConnected!=null){
+			setBillerResponseStatus(hasConnected?"S":"U");
+		}
+	}
+
+	public String getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(String effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+
+	
+
+	public Long getRetentionPeriod() {
+		return retentionPeriod;
+	}
+
+	public void setRetentionPeriod(Long retentionPeriod) {
+		this.retentionPeriod = retentionPeriod;
+	}
+
+	public String getDiscontinueHardCopy() {
+		return discontinueHardCopy;
+	}
+
+	public void setDiscontinueHardCopy(String discontinueHardCopy) {
+		this.discontinueHardCopy = discontinueHardCopy;
+	}
+
+	public String getUniqueBillIdentifier() {
+		return uniqueBillIdentifier;
+	}
+
+	public void setUniqueBillIdentifier(String uniqueBillIdentifier) {
+		this.uniqueBillIdentifier = uniqueBillIdentifier;
+	}
+
+	public String getBillerResponseStatus() {
+		return billerResponseStatus;
+	}
+
+	public void setBillerResponseStatus(String billerResponseStatus) {
+		this.billerResponseStatus = billerResponseStatus;
+	}
+
+	public void copy(BEConnectionDTOs connections) {
+		setBillerCode(connections.getBillerCode());
+		setBillerResponseStatus(connections.getBillerResponseStatus());
+		setBillListId(connections.getBillListId());
+		setBillName(connections.getBillName());
+		setConnectionDate(connections.getConnectionDate());
+		setConnectionId(connections.getConnectionId());
+		setDiscontinueHardCopy(connections.getDiscontinueHardCopy());
+		setEffectiveDate(connections.getEffectiveDate());
+		setFutureType(connections.isFutureType);
+		setHasConnected(connections.isHasConnected());
+		setRetentionPeriod(connections.getRetentionPeriod());
+		setUniqueBillIdentifier(connections.getUniqueBillIdentifier());
+		// Log.i("BEConnectionDTO", ""+connections.getBillerCode());
+	}
+
+	public BEComparisonModel compare(BEConnectionDTOs connection) {
+
+		BEComparisonModel compareModel = new BEComparisonModel();
+		boolean result = true;
+		
+		BEConnectionDTOs diffConnection = new BEConnectionDTOs();
+		diffConnection.copy(this);
+		
+		if(BEUtility.compare(isHasConnected(), connection.isHasConnected())){
+			diffConnection.setHasConnected(null);
+		} else {
+			result = false;
+		}
+		
+
+		if(BEUtility.compare(getBillerResponseStatus(), connection.getBillerResponseStatus())){
+			diffConnection.setBillerResponseStatus(null);
+		} else {
+			result = false;
+		}
+		
+		if(BEUtility.compare(getConnectionDate(), connection.getConnectionDate())){
+			diffConnection.setConnectionDate(null);
+		} else {
+			result = false;
+		}
+		
+	
+		if(BEUtility.compare(getDiscontinueHardCopy(), connection.getDiscontinueHardCopy())){
+			diffConnection.setDiscontinueHardCopy(null);
+		} else {
+			result = false;
+		}
+		
+		if(BEUtility.compare(getEffectiveDate(), connection.getEffectiveDate())){
+			diffConnection.setEffectiveDate(null);
+		} else {
+			result = false;
+		}
+		
+		if(BEUtility.compare(isFutureType(), connection.isFutureType())){
+			diffConnection.setFutureType(null);
+		} else {
+			result = false;
+		}
+		
+		if(getRetentionPeriod()==connection.getRetentionPeriod()){
+			diffConnection.setRetentionPeriod(null);
+		} else {
+			result = false;
+		}
+		
+		compareModel.setObject(diffConnection);
+		compareModel.setFlag(result);
+
+		return compareModel;
+	}
+}

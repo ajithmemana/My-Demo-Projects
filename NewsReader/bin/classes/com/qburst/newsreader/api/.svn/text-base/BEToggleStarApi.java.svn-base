@@ -1,0 +1,96 @@
+package com.qburst.billexpress.api;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import android.R.bool;
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEToggleStarRequestBean;
+import com.qburst.billexpress.api.beans.response.BEToggleStarResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEToggleStarAPIListener;
+/**
+*
+* API client end to retrieve Toggle Star information.
+*  @author user
+*/
+public class BEToggleStarApi extends BEBaseApi implements BEApiListener {
+
+    private BEToggleStarAPIListener _listener;
+	
+	public BEToggleStarApi(BEToggleStarAPIListener listener, BEExceptionApiListener exceptionlistener) {
+		
+		this._excptnListener = exceptionlistener;
+		this._listener = listener;
+		
+	}
+	
+	public void toggleStar(String sessionId, ArrayList <Long> statementIds, bool starFlag ) {
+		
+		BEToggleStarRequestBean requestBean = new BEToggleStarRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setStarFlag(starFlag);
+		requestBean.setStatementIds(statementIds);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEToggleStarResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+
+	@Override
+	public String baseUrl(){
+		return super.baseUrl()+BEApiConstants.toggleStarurl;
+	}
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		
+		Log.i("RESPONSE", response.toString());
+		
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEToggleStarResponseBean respBean = (BEToggleStarResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			
+
+			if (respBean != null) {
+				
+				String resultString = respBean.getResultString();
+				int responseCode = respBean.getStatusCode();
+				Log.isLoggable("ResponseCode",responseCode );
+				Log.i("ResponseString",resultString);
+				
+					if(_listener!=null){
+					_listener.receivedToggleStarResponse();
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+	
+	
+
+}

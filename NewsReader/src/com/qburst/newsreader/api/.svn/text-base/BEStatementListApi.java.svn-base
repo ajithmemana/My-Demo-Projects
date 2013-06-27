@@ -1,0 +1,100 @@
+package com.qburst.billexpress.api;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEStatementListRequestBean;
+import com.qburst.billexpress.api.beans.response.BEStatementResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEStatementListAPIListener;
+import com.qburst.billexpress.models.BEStatement;
+
+/**
+ * 
+ * API client end to retrieve StatementList information.
+ * 
+ * @author user
+ */
+public class BEStatementListApi extends BEBaseApi implements BEApiListener {
+
+	BEStatementListAPIListener _listener;
+
+	public BEStatementListApi(BEStatementListAPIListener listener,
+			BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+
+	// TODO implement functionality to get statement list
+	public void getStatementList(String sessionId, String searchText,
+			String filterName, String filtercategory, int startIndex,
+			int stopIndex, String startDate, String endDate) {
+		BEStatementListRequestBean requestBean = new BEStatementListRequestBean();
+		requestBean.setSessionId(sessionId);
+		requestBean.setFilterName(filterName);
+		requestBean.setFilterCategory(filtercategory);
+		requestBean.setStartIndex(startIndex);
+		requestBean.setEndIndex(stopIndex);
+		requestBean.setStartDateRange(startDate);
+		requestBean.setEndDateRange(endDate);
+		requestBean.setSearchString(searchText);
+
+		if (_listener != null) {
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this,
+				requestBean.toJsonString(), BEStatementResponseBean.class,
+				baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+
+	@Override
+	public String baseUrl() {
+		return super.baseUrl() + BEApiConstants.getStatementListUrl;
+		
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE for BEStatement", response.toString());
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEStatementResponseBean respBean = (BEStatementResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {
+
+				ArrayList<BEStatement> statements = respBean
+						.getCorrespondenceDTOs();
+				Log.i("STATEMENT API", statements.size() + "");
+				if (_listener != null) {
+					_listener.receivedStatementList(statements);
+				}
+
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+			}
+		}
+
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+
+	}
+
+}

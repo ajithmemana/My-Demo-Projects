@@ -1,0 +1,44 @@
+package com.qburst.billexpress.api.beans.request;
+
+
+public class BERenameFolderRequestBean extends BESessionRequestBean {
+	
+	//private String newName;
+	private String folderId;
+	private String folderName;
+	private String subFolderId;
+	private String subFolderName;
+	
+	public String getFolderId() {
+		return folderId;
+	}
+	public void setFolderId(String folderId) {
+		this.folderId = folderId;
+	}
+	public String getFolderName() {
+		return folderName;
+	}
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
+	}
+	public String getSubFolderId() {
+		return subFolderId;
+	}
+	public void setSubFolderId(String subFolderId) {
+		this.subFolderId = subFolderId;
+	}
+	public String getSubFolderName() {
+		return subFolderName;
+	}
+	public void setSubFolderName(String subFolderName) {
+		this.subFolderName = subFolderName;
+	}
+	
+	
+
+    
+
+
+	
+
+}

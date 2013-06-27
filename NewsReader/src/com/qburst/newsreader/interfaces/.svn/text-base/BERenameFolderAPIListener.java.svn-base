@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BERenameFolderAPI interface methods
+ *         renamedSuccessfully and errorInRenaming.
+ */
+public interface BERenameFolderAPIListener extends BEBaseAPIListener {
+
+	public void renamedSuccessfully();
+
+	public void errorInRenaming();
+
+}

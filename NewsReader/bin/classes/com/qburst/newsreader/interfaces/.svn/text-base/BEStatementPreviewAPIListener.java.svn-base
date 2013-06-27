@@ -1,0 +1,12 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BEStatementPreviewAPI interface methods
+ *         receivedStatementPreview and errorInStatementPreviewFetch.
+ */
+public interface BEStatementPreviewAPIListener extends BEBaseAPIListener {
+
+	public void receivedStatementPreview(Object pdfUrl, String payNowUrl);
+
+	public void errorInStatementPreviewFetch();
+}

@@ -1,0 +1,71 @@
+package com.qburst.billexpress.utilities;
+
+
+
+import android.graphics.Bitmap;
+import android.os.Message;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import com.qburst.billexpress.fragments.profile.BEProfileFragment;
+import com.qburst.billexpress.interfaces.BEProfileAuthenticationListener;
+
+	/**
+	 * @author user 
+	 * Web view client to listen SSO page events such as
+	 * Pageload,pageFinished,Received error etc.
+	 */
+	public class BEProfileAuthenticationWebViewClient extends WebViewClient{
+
+		private BEProfileAuthenticationListener _listener = null;
+
+		public BEProfileAuthenticationWebViewClient(BEProfileAuthenticationListener context) {
+
+			_listener =  (BEProfileFragment) context;
+		}
+
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			return super.shouldOverrideUrlLoading(view, url);
+		}
+
+		@Override
+		public void onPageFinished(WebView view, String url) {
+			if (_listener != null) {
+				_listener.pageLoadDidFinish();
+			}
+			super.onPageFinished(view, url);
+		}
+
+		@Override
+		public void onPageStarted(WebView view, String url, Bitmap favicon) {
+			if (_listener != null) {
+				if(url.equalsIgnoreCase("https://accounts.google.com/ServiceLoginAuth")){
+					_listener.userLoggedInSuccessfully();
+				} else {
+					_listener.pageLoadDidStart();
+				}
+			}
+			super.onPageStarted(view, url, favicon);
+		}
+
+		@Override
+		public void onReceivedError(WebView view, int errorCode,
+				String description, String failingUrl) {
+			if (_listener != null) {
+				_listener.networkErrorOccured();
+			}
+			super.onReceivedError(view, errorCode, description, failingUrl);
+		}
+
+		@Override
+		public void onFormResubmission(WebView view, Message dontResend,
+				Message resend) {
+			// TODO Auto-generated method stub
+			super.onFormResubmission(view, dontResend, resend);
+		}
+		
+		
+
+	}
+

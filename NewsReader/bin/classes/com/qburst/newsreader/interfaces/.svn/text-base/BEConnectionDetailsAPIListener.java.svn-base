@@ -1,0 +1,18 @@
+package com.qburst.billexpress.interfaces;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BEConnectionList;
+import com.qburst.billexpress.models.BESenderconnections;
+
+/**
+ * @author user Designed BEConnectionDetailsAPI interface methods errorConnectionDetails and
+ *         receivedConnectionDetails and receivedConnectionDetails.
+ */
+public interface BEConnectionDetailsAPIListener extends BEBaseAPIListener {
+
+	public void errorConnectionDetails();
+    public void receivedConnectionDetails(ArrayList<BESenderconnections> senderConnections, boolean forAllFuture);
+	void receivedConnectionDetails(BEConnectionList connectionList); 
+
+}

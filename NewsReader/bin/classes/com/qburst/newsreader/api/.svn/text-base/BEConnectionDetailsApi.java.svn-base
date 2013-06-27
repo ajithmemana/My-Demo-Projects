@@ -1,0 +1,92 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEConnectionDetailsRequestBean;
+import com.qburst.billexpress.api.beans.response.BEConnectionDetailsResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEConnectionDetailsAPIListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.models.BEConnectionList;
+
+/**
+ * 
+ * API client end to retrieve aConnection Details.
+ * 
+ * @author user
+ */
+public class BEConnectionDetailsApi extends BEBaseApi implements BEApiListener {
+
+	BEConnectionDetailsAPIListener _listener;
+
+	public BEConnectionDetailsApi(BEConnectionDetailsAPIListener listener,
+			BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+
+	public void connectionDetails(String sessionId) {
+
+		BEConnectionDetailsRequestBean requestBean = new BEConnectionDetailsRequestBean();
+		requestBean.setSessionId(sessionId);
+		if (_listener != null) {
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this,
+				requestBean.toJsonString(),
+				BEConnectionDetailsResponseBean.class, baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+
+	@Override
+	public String baseUrl() {
+
+		return super.baseUrl() + BEApiConstants.getMyConnectionDetailsurl;
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE123123132", response.toString());
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEConnectionDetailsResponseBean respBean = (BEConnectionDetailsResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {
+
+				BEConnectionList connectionsList = new BEConnectionList();
+
+				connectionsList = respBean.getConnectionList();
+				// connectionsList.add(respBean.getConnectionList());
+
+				if (_listener != null) {
+					_listener.receivedConnectionDetails(connectionsList);
+				}
+
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+
+		if (_listener != null) {
+			_listener.requestDidFinish();
+		}
+		_listener.errorConnectionDetails();
+		detectErrorMessage(errorResponse);
+
+	}
+
+}

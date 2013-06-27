@@ -1,0 +1,18 @@
+package com.qburst.billexpress.api.beans.response;
+
+import com.qburst.billexpress.models.BEAlertListDTO;
+
+
+public class BEAlertSummaryResponseBean extends BEBaseResponseBean {
+	
+	private BEAlertListDTO alertListDTO;
+
+	public BEAlertListDTO getAlertListDTO() {
+		return this.alertListDTO;
+	}
+
+	public void setAlertListDTO(BEAlertListDTO alertListDTO) {
+		this.alertListDTO = alertListDTO;
+	}
+	
+}

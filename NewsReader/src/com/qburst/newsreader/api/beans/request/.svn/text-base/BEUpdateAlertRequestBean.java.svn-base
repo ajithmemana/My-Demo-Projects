@@ -1,0 +1,23 @@
+package com.qburst.billexpress.api.beans.request;
+
+import com.qburst.billexpress.models.BEAlertListDTO;
+
+public class BEUpdateAlertRequestBean extends BEBaseRequestBean {
+	
+	private BEAlertListDTO alertListDTO;
+
+	public BEAlertListDTO getAlertListDTO() {
+		return alertListDTO;
+	}
+
+	public void setAlertListDTO(BEAlertListDTO alertListDTO) {
+		this.alertListDTO = alertListDTO;
+	}
+	
+//	private boolean isAlertTypeCustomized;
+//	private boolean newBillStatus;
+//	private boolean unreadBillStatus;
+//	private boolean autoForwardBillStatus;
+	
+
+}

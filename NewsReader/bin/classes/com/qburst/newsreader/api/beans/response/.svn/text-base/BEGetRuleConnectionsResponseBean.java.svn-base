@@ -1,0 +1,16 @@
+package com.qburst.billexpress.api.beans.response;
+
+import com.qburst.billexpress.models.BEGetRuleConnections;
+
+public class BEGetRuleConnectionsResponseBean extends BEBaseResponseBean{
+	
+	private BEGetRuleConnections rulesDTO;
+
+	public BEGetRuleConnections getRulesDTO() {
+		return rulesDTO;
+	}
+	public void setRulesDTO(BEGetRuleConnections rulesDTO) {
+		this.rulesDTO = rulesDTO;
+	}
+
+}

@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BEDeleteFolderAPI interface methods
+ *         deletedFolders and errorInFolderDeletion.
+ */
+public interface BEDeleteFolderAPIListener extends BEBaseAPIListener {
+
+	public void deletedFolders(int responseCode);
+
+	public void errorInFolderDeletion();
+
+}

@@ -1,0 +1,18 @@
+package com.qburst.billexpress.api.beans.response;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BEFolder;
+
+public class BEFolderResponseBean extends BEBaseResponseBean {
+	ArrayList<BEFolder> folders;
+
+	public ArrayList<BEFolder> getFolders() {
+		return folders;
+	}
+
+	public void setFolders(ArrayList<BEFolder> folders) {
+		this.folders = folders;
+	}
+
+}

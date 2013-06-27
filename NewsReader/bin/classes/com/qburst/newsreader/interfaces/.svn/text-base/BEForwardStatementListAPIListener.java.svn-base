@@ -1,0 +1,12 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BEForwardStatementListAPI interface methods
+ *         forwardedStatementList and errorInForwardingStatementList.
+ */
+public interface BEForwardStatementListAPIListener extends BEBaseAPIListener {
+
+	public void forwardedStatementList();
+
+	public void errorInForwardingStatementList();
+}

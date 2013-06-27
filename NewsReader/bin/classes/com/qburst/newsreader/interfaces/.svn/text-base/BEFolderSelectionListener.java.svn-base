@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+import com.qburst.billexpress.models.BEFolder;
+
+/**
+ * @author user Designed BEFolderSelectionListener interface methods
+ *         selectedFolder and cancelledFolderSelection.
+ */
+public interface BEFolderSelectionListener {
+	
+	public void selectedFolder(BEFolder folder);
+	public void cancelledFolderSelection();
+}

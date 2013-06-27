@@ -1,0 +1,76 @@
+package com.qburst.billexpress.models;
+/**
+ * @author user Model DAO for managing data with rules.
+ * 
+ */
+public class BEGetRules {
+
+	private Long ruleId;
+	private String ruleName;
+	private Long moveToFolderId;
+	private String searchString;
+	private Boolean allFlag;
+	private String[] senders;
+	
+	/**
+	 * The selected flag is for getting and setting the click on radiobutton.
+	 */
+	private boolean selected;
+
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
+
+	public String getRuleName() {
+		return ruleName;
+	}
+
+	public void setRuleName(String ruleName) {
+		this.ruleName = ruleName;
+	}
+
+	public Long getMoveToFolderId() {
+		return moveToFolderId;
+	}
+
+	public void setMoveToFolderId(Long moveToFolderId) {
+		this.moveToFolderId = moveToFolderId;
+	}
+
+	public String getSearchString() {
+		return searchString;
+	}
+
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
+
+	public Boolean isAllFlag() {
+		return allFlag;
+	}
+
+	public void setAllFlag(Boolean allFlag) {
+		this.allFlag = allFlag;
+	}
+
+	public String[] getSenders() {
+		return senders;
+	}
+
+	public void setSenders(String[] senders) {
+		this.senders = senders;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+}

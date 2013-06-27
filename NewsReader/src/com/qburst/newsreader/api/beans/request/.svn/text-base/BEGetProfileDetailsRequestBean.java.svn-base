@@ -1,0 +1,5 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BEGetProfileDetailsRequestBean extends BESessionRequestBean{
+
+}

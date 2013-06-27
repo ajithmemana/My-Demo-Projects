@@ -1,0 +1,25 @@
+package com.qburst.billexpress.api.beans.response;
+
+public class BEUpdateProfileResponseBean extends BEBaseResponseBean{
+	
+	private String resultString;
+	private int statusCode;
+
+	public String getResultString() {
+		return resultString;
+	}
+
+	public void setResultString(String resultString) {
+		this.resultString = resultString;
+	}
+
+	public int getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
+
+
+}

@@ -1,0 +1,16 @@
+package com.qburst.billexpress.interfaces;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BEStatement;
+/**
+ * @author user Designed BEStatementListAPI interface methods
+ *         receivedStatementList and errorInStatementListFetch.
+ */
+public interface BEStatementListAPIListener extends BEBaseAPIListener {
+
+	public void receivedStatementList(ArrayList<BEStatement> statements);
+
+	public void errorInStatementListFetch();
+
+}

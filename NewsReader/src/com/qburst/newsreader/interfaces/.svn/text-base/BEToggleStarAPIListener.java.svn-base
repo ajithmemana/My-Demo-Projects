@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BEToggleStarAPI interface methods
+ *         receivedToggleStarResponse and errorInToggleStar.
+ */
+public interface BEToggleStarAPIListener extends BEBaseAPIListener {
+
+	public void receivedToggleStarResponse();
+
+	public void errorInToggleStar();
+
+}

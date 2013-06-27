@@ -1,0 +1,13 @@
+package com.qburst.billexpress.interfaces;
+
+public interface BEProfileAuthenticationListener {
+
+	public void pageLoadDidFinish();
+
+	public void userLoggedInSuccessfully();
+
+	public void pageLoadDidStart();
+
+	public void networkErrorOccured();
+
+}

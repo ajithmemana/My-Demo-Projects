@@ -1,0 +1,85 @@
+package com.qburst.billexpress.api;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BESessionRequestBean;
+import com.qburst.billexpress.api.beans.response.BEFolderResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEFolderApiListener;
+import com.qburst.billexpress.models.BEFolder;
+/**
+ * @author user
+ * 
+ * API client end to retrieve all folders from server.
+ * 
+ */
+public class BEFolderApi extends BEBaseApi implements BEApiListener {
+
+	private BEFolderApiListener _listener;
+	
+	public BEFolderApi(BEFolderApiListener listener, BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+	
+	public void getFolders(String sessionId){
+		BESessionRequestBean requestBean = new BESessionRequestBean();
+		requestBean.setSessionId(sessionId);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEFolderResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+	
+	@Override
+	public String baseUrl(){
+		return super.baseUrl()+BEApiConstants.folderUrl;
+	}
+
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEFolderResponseBean respBean = (BEFolderResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {				
+				
+				ArrayList<BEFolder> folders = respBean.getFolders();
+				Log.i("Folder API", folders.size()+"");
+				if(_listener!=null){
+					_listener.receivedFolders(folders);
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+	}
+
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		_listener.errorOccurredInFolderFetch();
+		detectErrorMessage(errorResponse);
+	}
+}

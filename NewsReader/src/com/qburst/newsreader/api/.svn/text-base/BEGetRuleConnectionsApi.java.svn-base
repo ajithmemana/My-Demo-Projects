@@ -1,0 +1,84 @@
+package com.qburst.billexpress.api;
+
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEGetRuleConnectionsRequestBean;
+import com.qburst.billexpress.api.beans.response.BEGetRuleConnectionsResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEGetRuleConnectionsApiListener;
+import com.qburst.billexpress.models.BEGetRuleConnections;
+/**
+*
+* API client end to retrieve Rule connection details.
+*  @author user
+*/
+public class BEGetRuleConnectionsApi extends BEBaseApi implements BEApiListener{
+
+	BEGetRuleConnectionsApiListener _listener;
+	
+	public BEGetRuleConnectionsApi(BEGetRuleConnectionsApiListener listener,BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+    public void getRulesConnectionDetails(String sessionId, Long ruleId){
+		
+		BEGetRuleConnectionsRequestBean requestBean = new BEGetRuleConnectionsRequestBean();
+		requestBean.setRuleId(ruleId);		
+		requestBean.setSessionId(sessionId);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEGetRuleConnectionsResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+	    	service.execute(baseUrl());
+	}
+	@Override
+	public String baseUrl(){
+		
+		return super.baseUrl()+BEApiConstants.getRulesConnectionUrl;
+	}
+	
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+		Log.i("RESPONSE123123132", response.toString());
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEGetRuleConnectionsResponseBean respBean = (BEGetRuleConnectionsResponseBean) response.get(BEApiConstants.kSuccessMsgKey);
+
+			if (respBean != null) {				
+				
+				BEGetRuleConnections ruleConnections = new BEGetRuleConnections();
+				
+				ruleConnections = respBean.getRulesDTO();
+				
+				if(_listener!=null){
+					_listener.receivedRulesConnectionsDetails(ruleConnections);
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		_listener.errorInRulesConnectionDetails();
+		detectErrorMessage(errorResponse);
+	}
+}

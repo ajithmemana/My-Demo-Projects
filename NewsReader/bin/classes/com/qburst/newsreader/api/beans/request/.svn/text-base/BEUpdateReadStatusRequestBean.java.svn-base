@@ -1,0 +1,28 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BEUpdateReadStatusRequestBean extends BESessionRequestBean{
+	
+	private boolean isBeforeLogin;
+	private Long msgId;
+	private String status;
+
+	public boolean isBeforeLogin() {
+		return isBeforeLogin;
+	}
+	public void setBeforeLogin(boolean isBeforeLogin) {
+		this.isBeforeLogin = isBeforeLogin;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public Long getMsgId() {
+		return msgId;
+	}
+	public void setMsgId(Long msgId) {
+		this.msgId = msgId;
+	}
+}

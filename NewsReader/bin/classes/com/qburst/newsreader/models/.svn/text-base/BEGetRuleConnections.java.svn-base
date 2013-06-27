@@ -1,0 +1,130 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * @author user Model DAO for managing data with rule connections.
+ * 
+ */
+public class BEGetRuleConnections {
+
+	private Long ruleId;
+	private String ruleName;
+	private String moveToFolderId;
+	private Boolean allFlag;
+	private ArrayList<BERulesBillers> billers;
+		
+	public BEGetRuleConnections(BEGetRuleConnections connections) {
+		this.ruleId = connections.ruleId;
+		this.ruleName = connections.ruleName;
+		this.moveToFolderId = connections.moveToFolderId;
+		this.allFlag = connections.allFlag;
+		
+		if(connections.billers!=null){
+			this.billers = new ArrayList<BERulesBillers>();
+			
+			for(BERulesBillers biller:connections.billers){
+				this.billers.add(new BERulesBillers(biller));
+			}
+		}
+		
+	}
+	
+	public BEGetRuleConnections() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Long getRuleId() {
+		return ruleId;
+	}
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
+	public String getRuleName() {
+		return ruleName;
+	}
+	public void setRuleName(String ruleName) {
+		this.ruleName = ruleName;
+	}
+	public String getMoveToFolderId() {
+		return moveToFolderId;
+	}
+	public void setMoveToFolderId(String moveToFolderId) {
+		this.moveToFolderId = moveToFolderId;
+	}
+	public Boolean isAllFlag() {
+		return allFlag;
+	}
+	public void setAllFlag(Boolean allFlag) {
+		this.allFlag = allFlag;
+	}
+	public ArrayList<BERulesBillers> getBillers() {
+		return billers;
+	}
+	public void setBillers(ArrayList<BERulesBillers> billers) {
+		this.billers = billers;
+	}
+	
+	public void updateFlagStatus(Boolean status){
+		
+		setAllFlag(status);
+		
+		if(this.billers!=null&&this.billers.size()>0){
+			
+			for(BERulesBillers biller:this.billers){
+				biller.updateFlagStatus(status);
+			}
+		}
+	}
+	
+	/**
+	 * @param connection - object of BEGetRuleConnections
+	 * @return object of BEComparisonModel.
+	 */
+	public BEComparisonModel compare(BEGetRuleConnections connection){
+		
+		BEComparisonModel model = new BEComparisonModel();
+		
+		BEGetRuleConnections diffConnection = new BEGetRuleConnections(this);
+		
+		boolean flag = true;
+		
+		if(BEUtility.compare(getRuleName(), connection.getRuleName()))
+			diffConnection.setRuleName(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(getMoveToFolderId(), connection.getMoveToFolderId()))
+			diffConnection.setMoveToFolderId(null);
+		else 
+			flag = false;
+		
+		if(BEUtility.compare(isAllFlag(), connection.isAllFlag()))
+			diffConnection.setAllFlag(null);
+		else 
+			flag = false;
+		
+		if(this.billers!=null){
+			
+			int count = this.billers.size();
+			diffConnection.billers.clear();
+			for(int i=0;i<count;i++){
+				
+				BEComparisonModel subModel = this.billers.get(i).compare(connection.billers.get(i));
+				if(subModel.isFlag()==false){
+					flag = false;
+					diffConnection.billers.add((BERulesBillers)subModel.getObject());
+				}
+			}
+			
+		}
+		
+		
+		model.setFlag(flag);
+		model.setObject(diffConnection);		
+		return model;
+	}
+	
+}

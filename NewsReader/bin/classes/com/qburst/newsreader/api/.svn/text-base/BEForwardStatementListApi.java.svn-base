@@ -1,0 +1,91 @@
+package com.qburst.billexpress.api;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import android.util.Log;
+
+import com.qburst.billexpress.api.beans.request.BEForwardStatementListRequestBean;
+import com.qburst.billexpress.api.beans.response.BEForwardStatementListResponseBean;
+import com.qburst.billexpress.interfaces.BEApiListener;
+import com.qburst.billexpress.interfaces.BEExceptionApiListener;
+import com.qburst.billexpress.interfaces.BEForwardStatementListAPIListener;
+/**
+*
+* API client end to retrieve Forward Statements information.
+*  @author user
+*/
+public class BEForwardStatementListApi extends BEBaseApi implements BEApiListener{
+
+	BEForwardStatementListAPIListener _listener;
+	
+	public BEForwardStatementListApi(BEForwardStatementListAPIListener listener,BEExceptionApiListener exceptionListener) {
+		this._excptnListener = exceptionListener;
+		this._listener = listener;
+	}
+	
+	public void forwardStatementList(String sessionId, String mailId, ArrayList<Long> statementIds){
+		BEForwardStatementListRequestBean requestBean= new BEForwardStatementListRequestBean();
+		requestBean.getStatementIds();
+		requestBean.setSessionId(sessionId);
+		requestBean.setEmailId(mailId);
+		requestBean.setStatementIds(statementIds);
+		if(_listener!=null){
+			_listener.requestDidStart();
+		}
+		BEBaseWebService service = new BEBaseWebService(this, requestBean.toJsonString(), BEForwardStatementListResponseBean.class,baseUrl());
+		service.setAuthenticationParams("qburst", "qburst");
+		service.execute(baseUrl());
+	}
+	
+	@Override
+	public String baseUrl(){
+		return super.baseUrl()+BEApiConstants.forwardStatementListUrl;
+	}
+
+	@Override
+	public void onResponseReceived(Map<String, Object> response) {
+       Log.i("RESPONSE", response.toString());
+		
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		
+		if (response.containsKey(BEApiConstants.kSuccessMsgKey)) {
+
+			BEForwardStatementListResponseBean respBean = (BEForwardStatementListResponseBean) response
+					.get(BEApiConstants.kSuccessMsgKey);
+
+			
+
+			if (respBean != null) {
+				
+				String resultString = respBean.getResultString();
+				int responseCode = respBean.getStatusCode();
+				
+				Log.isLoggable("ResponseCode",responseCode );
+				Log.i("ResponseString",resultString);
+				
+					if(_listener!=null){
+					_listener.forwardedStatementList();
+				}
+				
+			}
+		} else if (response.containsKey(BEApiConstants.kApiFailedMsgKey)) {
+
+			if (response.containsKey("HttpStatus")) {
+
+				
+			}
+		}
+	}
+
+	@Override
+	public void onFailedToGetResponse(Map<String, Object> errorResponse) {
+		
+		if(_listener!=null){
+			_listener.requestDidFinish();
+		}
+		detectErrorMessage(errorResponse);
+	}
+}

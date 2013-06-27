@@ -1,0 +1,121 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * @author user Model DAO for managing biller level connections data.
+ */
+public class BESenderconnections {
+	
+	private String senderCode;
+	private String senderName;
+	private Boolean newBiller;
+	private Boolean forSenderLevel;
+	private ArrayList<BEConnections> connections;
+	
+	public String getSenderCode() {
+		return senderCode;
+	}
+	public void setSenderCode(String senderCode) {
+		this.senderCode = senderCode;
+	}
+	public String getSenderName() {
+		return senderName;
+	}
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
+	}
+	public Boolean isForSenderLevel() {
+		return forSenderLevel;
+	}
+	public void setForSenderLevel(Boolean forSenderLevel) {
+		this.forSenderLevel = forSenderLevel;
+	}
+	public ArrayList<BEConnections> getConnections() {
+		return connections;
+	}
+	public void setConnections(ArrayList<BEConnections> connections) {
+		this.connections = connections;
+	}
+	
+	public void setSenderLevelConnectionStatus(boolean connectionStatus){
+		
+		setForSenderLevel(connectionStatus);
+		
+		int count = getConnections().size();
+		
+		for(int i=0;i<count;i++){
+			
+			BEConnections connection = getConnections().get(i);
+			connection.setHasConnected(connectionStatus);
+			
+		}
+		
+	}
+	
+	public void copy (BESenderconnections senderConnections)
+	{
+		setForSenderLevel(senderConnections.isForSenderLevel());
+		setNewBiller(senderConnections.getNewBiller());
+		setSenderCode(senderConnections.getSenderCode());
+		setSenderName(senderConnections.getSenderName());
+		ArrayList<BEConnections> connection = new ArrayList<BEConnections>();
+		
+		int count = senderConnections.getConnections().size();
+		for (int i=0; i<count;i++) {
+			
+			BEConnections copyConnection = new BEConnections();
+			copyConnection.copy(senderConnections.getConnections().get(i));
+			connection.add(copyConnection);
+		 }
+		setConnections(connection);
+	}
+	public BEComparisonModel compare(BESenderconnections cSender) {
+
+		BEComparisonModel compareModel = new BEComparisonModel();
+		
+		BESenderconnections diffConnections = new BESenderconnections();
+		diffConnections.copy(this);
+		boolean result = true;
+
+		if(BEUtility.compare(newBiller, cSender.newBiller)) {
+			diffConnections.setNewBiller(null);
+		} else {
+			result = false;
+		}
+		if(BEUtility.compare(forSenderLevel, cSender.forSenderLevel)) {
+			diffConnections.setForSenderLevel(null);
+		} else {
+			result = false;
+		}
+		
+		ArrayList<BEConnections> resultConnection = new ArrayList<BEConnections>();
+		int count = getConnections().size();
+		for(int i=0;i<count;i++)
+		{
+			BEConnections copyConnections = cSender.getConnections().get(i);
+			BEConnections connections = getConnections().get(i);
+			BEComparisonModel tModel = connections.compare(copyConnections);
+			if (tModel.isFlag() == false) {
+				resultConnection.add((BEConnections) tModel.getObject());
+				result = false;
+
+			}
+		}
+		
+		diffConnections.setConnections(resultConnection);
+		compareModel.setObject(diffConnections);
+		compareModel.setFlag(result);
+		return compareModel;
+		}
+	public Boolean getNewBiller() {
+		return newBiller;
+	}
+	public void setNewBiller(Boolean newBiller) {
+		this.newBiller = newBiller;
+	}
+
+
+}

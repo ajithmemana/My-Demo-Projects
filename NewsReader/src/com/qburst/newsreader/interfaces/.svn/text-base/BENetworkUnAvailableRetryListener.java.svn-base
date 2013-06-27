@@ -1,0 +1,11 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BENetworkUnAvailableRetryListener interface methods
+ *         retry and setEditButtonEnableStatus.
+ */
+
+public interface BENetworkUnAvailableRetryListener extends BEApiListener {
+	public void retry(String baseUrl);
+	public void setEditButtonEnableStatus(boolean status);
+}

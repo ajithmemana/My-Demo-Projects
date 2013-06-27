@@ -1,0 +1,12 @@
+package com.qburst.billexpress.interfaces;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.models.BENotification;
+
+public interface BENotificationApiListener extends BEBaseAPIListener {
+
+	public void receivedNotifications(ArrayList<BENotification> notifications);
+	public void errorInNotificationFetch(); 
+
+}

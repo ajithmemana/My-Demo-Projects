@@ -1,0 +1,122 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * @author user Model DAO for managing biller level connection data.
+ */
+public class BERulesBillers {
+
+	private String billerCode;
+	private String billerName;
+	private Boolean forbillerLevel;
+	private ArrayList<BERulesConnections> connections;
+	
+	public BERulesBillers() {
+		
+	}
+	
+	public BERulesBillers(BERulesBillers biller) {
+		
+		this.billerCode = biller.billerCode;
+		this.billerName = biller.billerName;
+		this.forbillerLevel = biller.forbillerLevel;
+		
+		if(biller.connections!=null){
+			this.connections = new ArrayList<BERulesConnections>();
+			
+			for(BERulesConnections connection:biller.connections){
+				this.connections.add(new BERulesConnections(connection));
+			}
+		}
+		
+	}
+	public String getBillerCode() {
+		return billerCode;
+	}
+	public void setBillerCode(String billerCode) {
+		this.billerCode = billerCode;
+	}
+	public String getBillerName() {
+		return billerName;
+	}
+	public void setBillerName(String billerName) {
+		this.billerName = billerName;
+	}
+	public Boolean isForbillerLevel() {
+		return forbillerLevel;
+	}
+	public void setForbillerLevel(Boolean forbillerLevel) {
+		this.forbillerLevel = forbillerLevel;
+	}
+	public ArrayList<BERulesConnections> getConnections() {
+		return connections;
+	}
+	public void setConnections(ArrayList<BERulesConnections> connections) {
+		this.connections = connections;
+	}
+	
+	public void updateFlagStatus(Boolean status) {
+		setForbillerLevel(status);
+		
+		if(this.connections!=null&&this.connections.size()>0){
+			
+			for(BERulesConnections connection:this.connections){
+				connection.updateFlagStatus(status);
+			}
+		}
+		
+	}
+	/**
+	 * @param billers - object of BERulesBillers
+	 * @return object of BEComparisonModel which gives the difference between 
+	 *   received data and changed data.
+	 */
+	public BEComparisonModel compare(BERulesBillers billers) {
+		
+		BEComparisonModel model = new BEComparisonModel();
+		
+		boolean flag = true;
+		
+		BERulesBillers diffBiller = new BERulesBillers(this);
+		
+//		if(BEUtility.compare(getBillerCode(), billers.getBillerCode()))
+//			diffBiller.setBillerCode(null);
+//		else 
+//			flag = false;
+//		
+//		if(BEUtility.compare(getBillerName(), billers.getBillerName()))
+//			diffBiller.setBillerName(null);
+//		else 
+//			flag = false;
+		
+		if(BEUtility.compare(isForbillerLevel(), billers.isForbillerLevel()))
+			diffBiller.setForbillerLevel(null);
+		else 
+			flag = false;
+		
+		if(this.connections!=null){
+			
+			diffBiller.connections.clear();
+			
+			int count = this.connections.size();
+			
+			for(int i=0;i<count;i++){
+				
+				BEComparisonModel subModel = this.connections.get(i).compare(billers.connections.get(i));
+				if(subModel.isFlag()==false){
+					flag=false;
+					diffBiller.connections.add((BERulesConnections)subModel.getObject());
+				}
+			}
+		}
+		
+		model.setFlag(flag);
+		model.setObject(diffBiller);
+		
+		return model;
+	}
+	
+}

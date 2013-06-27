@@ -1,0 +1,61 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+/**
+ * @author user Model DAO for managing data with folder.
+ */
+public class BEFolder {
+
+	private String folderId;
+	private String subFolderId;
+	private String folderName;
+	private String parentFolderId = "0";
+	private boolean folderTypeSystem;
+	private boolean selected = false;
+	private ArrayList<BEFolder> subfolders;
+	public String getFolderId() {
+		return folderId;
+	}
+	public void setFolderId(String folderId) {
+		this.folderId = folderId;
+	}
+	public String getSubFolderId() {
+		return subFolderId;
+	}
+	public void setSubFolderId(String subFolderId) {
+		this.subFolderId = subFolderId;
+	}
+	public String getFolderName() {
+		return folderName;
+	}
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
+	}
+	public String getParentFolderId() {
+		return parentFolderId;
+	}
+	public void setParentFolderId(String parentFolderId) {
+		this.parentFolderId = parentFolderId;
+	}
+	public boolean isFolderTypeSystem() {
+		return folderTypeSystem;
+	}
+	public void setFolderTypeSystem(boolean folderTypeSystem) {
+		this.folderTypeSystem = folderTypeSystem;
+	}
+	public boolean isSelected() {
+		return selected;
+	}
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+	public ArrayList<BEFolder> getSubfolders() {
+		return subfolders;
+	}
+	public void setSubfolders(ArrayList<BEFolder> subfolders) {
+		this.subfolders = subfolders;
+	}
+
+	
+}

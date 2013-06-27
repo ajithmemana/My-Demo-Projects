@@ -1,0 +1,12 @@
+package com.qburst.billexpress.interfaces;
+
+/**
+ * @author user Designed BEBaseAPI interface methods requestDidStart and
+ *         requestDidFinish.
+ */
+public interface BEBaseAPIListener {
+
+	public void requestDidStart();
+
+	public void requestDidFinish();
+}

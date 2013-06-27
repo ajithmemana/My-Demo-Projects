@@ -1,0 +1,15 @@
+package com.qburst.billexpress.api.beans.request;
+
+public class BEDownloadStatementRequestBean extends BESessionRequestBean{
+	
+	private long statementId;
+
+	public long getStatementId() {
+		return statementId;
+	}
+
+	public void setStatementId(long statementId) {
+		this.statementId = statementId;
+	}
+
+}

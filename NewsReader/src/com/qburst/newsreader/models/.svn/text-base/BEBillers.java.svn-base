@@ -1,0 +1,109 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * @author user Model DAO for managing data with biller details.
+ * 
+ */
+public class BEBillers {
+	// TODO: set all inner flags according to the biller type
+
+	private String billerCode;
+	private String billerName;
+	private ArrayList<BEConnectionDTOs> connectionDTOs;
+	private Boolean forbillerLevel;
+
+	public String getBillerCode() {
+		return billerCode;
+	}
+
+	public void setBillerCode(String billerCode) {
+		this.billerCode = billerCode;
+	}
+
+	public String getBillerName() {
+		return billerName;
+	}
+
+	public void setBillerName(String billerName) {
+		this.billerName = billerName;
+	}
+
+	public ArrayList<BEConnectionDTOs> getConnectionDTOs() {
+		return connectionDTOs;
+	}
+
+	public void setConnectionDTOs(ArrayList<BEConnectionDTOs> connectionDTOs) {
+		this.connectionDTOs = connectionDTOs;
+	}
+
+	public Boolean isForbillerLevel() {
+		return forbillerLevel;
+	}
+
+	public void setForbillerLevel(Boolean forbillerLevel) {
+		this.forbillerLevel = forbillerLevel;
+	}
+
+	public void setForBillerLevelStatus(boolean connectionStatus) {
+		setForbillerLevel(connectionStatus);
+		ArrayList<BEConnectionDTOs> connection = getConnectionDTOs();
+		for (BEConnectionDTOs connect : connection) {
+			connect.setHasConnected(connectionStatus);
+		}
+
+	}
+
+	public void copy(BEBillers biller) {
+		setBillerCode(biller.getBillerCode());
+		setBillerName(biller.getBillerName());
+		setForbillerLevel(biller.isForbillerLevel());
+		setConnectionDTOs(null);
+		ArrayList<BEConnectionDTOs> copyConnectionDTO = new ArrayList<BEConnectionDTOs>();
+		int count = biller.getConnectionDTOs().size();
+		for (int i = 0; i < count; i++) {
+			BEConnectionDTOs copyConnections = new BEConnectionDTOs();
+			copyConnections.copy(biller.getConnectionDTOs().get(i));
+			copyConnectionDTO.add(copyConnections);
+		}
+		setConnectionDTOs(copyConnectionDTO);
+	}
+
+	public BEComparisonModel compare(BEBillers copyBiller) {
+		BEComparisonModel compareModel = new BEComparisonModel();
+		boolean result = true;
+		
+		BEBillers diffbiller = new  BEBillers();
+		diffbiller.copy(this);
+		
+		if(BEUtility.compare(isForbillerLevel(), copyBiller.isForbillerLevel())){
+			diffbiller.setForbillerLevel(null);
+		} else {
+			result = false;
+		}
+		
+	
+		int count = getConnectionDTOs().size();
+		ArrayList<BEConnectionDTOs> resultantConnection = new ArrayList<BEConnectionDTOs>();
+
+		for (int i = 0; i < count; i++) {
+			BEConnectionDTOs connection = getConnectionDTOs().get(i);
+			BEConnectionDTOs cConnection = copyBiller.getConnectionDTOs()
+					.get(i);
+			BEComparisonModel tModel = connection.compare(cConnection);
+			if (tModel.isFlag() == false) {
+				resultantConnection.add((BEConnectionDTOs) tModel.getObject());
+				result = false;
+			}
+		}
+		
+		diffbiller.setConnectionDTOs(resultantConnection);
+		
+		compareModel.setObject(diffbiller);
+		compareModel.setFlag(result);
+		return compareModel;
+	}
+}

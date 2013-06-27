@@ -1,0 +1,14 @@
+package com.qburst.billexpress.interfaces;
+
+import com.qburst.billexpress.models.BEBillerTypeAlert;
+/**
+ * @author user Designed BEUpdateBillerAlertApi interface methods
+ *         successfullyUpdatedBillerAlert and failedToUpdateBillerAlert.
+ */
+public interface BEUpdateBillerAlertApiListener extends BEBaseAPIListener {
+
+	void successfullyUpdatedBillerAlert(BEBillerTypeAlert _alert);
+
+	void failedToUpdateBillerAlert(BEBillerTypeAlert _alert);
+
+}

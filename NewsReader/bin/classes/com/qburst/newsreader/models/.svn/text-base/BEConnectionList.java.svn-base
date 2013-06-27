@@ -1,0 +1,109 @@
+package com.qburst.billexpress.models;
+
+import java.util.ArrayList;
+
+import com.qburst.billexpress.utilities.BEUtility;
+
+/**
+ * @author user Model DAO for managing data with details of connections.
+ * 
+ */
+public class BEConnectionList {
+
+	private Boolean forAllFuture;
+	private ArrayList<BESenderconnections> senderConnections;
+
+	public Boolean isForAllFuture() {
+		return forAllFuture;
+	}
+
+	public void setForAllFuture(Boolean forAllFuture) {
+		this.forAllFuture = forAllFuture;
+	}
+
+	public ArrayList<BESenderconnections> getSenderConnections() {
+		return senderConnections;
+	}
+
+	public void setSenderConnections(ArrayList<BESenderconnections> senderConnections) {
+		this.senderConnections = senderConnections;
+	}
+	
+	public void setFutureConnectionStatus(boolean connectionStatus){
+		
+		setForAllFuture(connectionStatus);
+		
+		int count = getSenderConnections().size();
+		
+		for(int i=0;i<count;i++){
+			
+			BESenderconnections connections = getSenderConnections().get(i);
+			connections.setSenderLevelConnectionStatus(connectionStatus);						
+		}
+		
+	}
+	
+	public void copy(BEConnectionList connectionList)
+	{
+		
+		setForAllFuture(connectionList.isForAllFuture()); 
+		
+		setSenderConnections(null);
+		
+		ArrayList<BESenderconnections> copyConnection = new ArrayList<BESenderconnections>();
+		
+		int count = connectionList.getSenderConnections().size();
+		for (int i=0; i<count; i++)
+		{
+			
+			BESenderconnections copyConnections = new BESenderconnections();
+			copyConnections.copy(connectionList.getSenderConnections().get(i));
+			copyConnection.add(copyConnections);
+		}
+		
+		setSenderConnections(copyConnection);
+	
+	}
+	
+	
+	/**
+	 * @param copyConnectionList - BEConnectionList object
+	 * @return BEComparisonModel object
+	 */
+	public BEComparisonModel compare(BEConnectionList copyConnectionList) {
+
+		BEComparisonModel compareModel = new BEComparisonModel();
+		BEConnectionList diffConnectionlist = new BEConnectionList();
+		diffConnectionlist.copy(this);
+		boolean result = true; 
+
+		if(BEUtility.compare(forAllFuture, copyConnectionList.forAllFuture)){
+			diffConnectionlist.setForAllFuture(null);
+		} else {
+			result = false;
+		}
+		
+		
+		int count = copyConnectionList.getSenderConnections().size();
+		
+		ArrayList<BESenderconnections> senderConnections = new ArrayList<BESenderconnections>();
+           for(int i=0;i<count;i++){
+		
+        	BESenderconnections sender = getSenderConnections().get(i);
+			BESenderconnections cSender = copyConnectionList.getSenderConnections().get(i);
+			BEComparisonModel tModel = sender.compare(cSender);
+			 if(tModel.isFlag()==false){
+				 senderConnections.add((BESenderconnections)tModel.getObject());
+				 result = false;
+			 }
+			
+		}
+
+           diffConnectionlist.setSenderConnections(senderConnections);
+           compareModel.setObject(diffConnectionlist);
+           compareModel.setFlag(result);
+           return compareModel;
+	}
+	
+}
+

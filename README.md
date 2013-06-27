@@ -1,4 +1,4 @@
 My-Demo-Projects
 ================
-Author - Vineet Vijayan
+Author - Vineet Vijayan \n
 Description - A few sample codes
